@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2025-07-01
+  times: 1
+  duration: 1
+
+two:
+  date: 2025-07-01
+  times: 1
+  duration: 1
