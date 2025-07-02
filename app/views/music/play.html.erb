@@ -1,0 +1,145 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-2xl mx-auto">
+    <div class="bg-white shadow rounded-lg p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">瞑想音楽再生</h1>
+        <%= link_to "← 音楽ライブラリに戻る", music_index_path,
+            class: "text-blue-500 hover:text-blue-700" %>
+      </div>
+
+      <div class="mb-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">再生中の音楽</h2>
+        <p class="text-gray-600"><%= @file_name %></p>
+      </div>
+
+      <div class="mb-6">
+        <audio id="audio-player" controls class="w-full">
+          <source src="https://drive.google.com/uc?export=download&id=<%= @file_id %>" type="audio/mpeg">
+          お使いのブラウザは音声再生をサポートしていません。
+        </audio>
+      </div>
+
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-medium text-gray-700">再生時間</span>
+          <span id="duration-display" class="text-sm text-gray-500">00:00</span>
+        </div>
+        <div class="w-full bg-gray-200 rounded-full h-2">
+          <div id="progress-bar" class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <div class="border-t pt-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">瞑想記録</h3>
+        
+        <%= form_with model: @meditation_record, local: false, id: "meditation-form" do |form| %>
+          <div class="mb-4">
+            <%= form.label :duration, "瞑想時間（分）", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.number_field :duration, id: "meditation-duration", 
+                class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+                min: 1, max: 480 %>
+          </div>
+
+          <div class="mb-4">
+            <%= form.label :notes, "メモ", class: "block text-sm font-medium text-gray-700 mb-2" %>
+            <%= form.text_area :notes, rows: 3,
+                class: "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500",
+                placeholder: "瞑想の感想や気づきを記録してください..." %>
+          </div>
+
+          <div class="flex space-x-4">
+            <button type="button" id="start-meditation" 
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+              瞑想開始
+            </button>
+            <button type="button" id="stop-meditation" 
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded hidden">
+              瞑想終了
+            </button>
+            <%= form.submit "記録を保存", 
+                class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const audio = document.getElementById('audio-player');
+  const progressBar = document.getElementById('progress-bar');
+  const durationDisplay = document.getElementById('duration-display');
+  const meditationDuration = document.getElementById('meditation-duration');
+  const startButton = document.getElementById('start-meditation');
+  const stopButton = document.getElementById('stop-meditation');
+  const form = document.getElementById('meditation-form');
+  
+  let meditationStartTime = null;
+  let meditationTimer = null;
+
+  // 音声の時間更新
+  audio.addEventListener('timeupdate', function() {
+    const progress = (audio.currentTime / audio.duration) * 100;
+    progressBar.style.width = progress + '%';
+    
+    const minutes = Math.floor(audio.currentTime / 60);
+    const seconds = Math.floor(audio.currentTime % 60);
+    durationDisplay.textContent = 
+      String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+  });
+
+  // 瞑想開始
+  startButton.addEventListener('click', function() {
+    meditationStartTime = new Date();
+    startButton.classList.add('hidden');
+    stopButton.classList.remove('hidden');
+    
+    // タイマー開始
+    meditationTimer = setInterval(function() {
+      const elapsed = Math.floor((new Date() - meditationStartTime) / 1000 / 60);
+      meditationDuration.value = elapsed;
+    }, 1000);
+  });
+
+  // 瞑想終了
+  stopButton.addEventListener('click', function() {
+    if (meditationTimer) {
+      clearInterval(meditationTimer);
+      meditationTimer = null;
+    }
+    
+    startButton.classList.remove('hidden');
+    stopButton.classList.add('hidden');
+  });
+
+  // フォーム送信
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    formData.append('duration', meditationDuration.value);
+    
+    fetch('/meditation_records/create_from_music', {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('瞑想記録が保存されました！');
+        window.location.href = '/meditation_records';
+      } else {
+        alert('エラーが発生しました: ' + data.errors.join(', '));
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('エラーが発生しました');
+    });
+  });
+});
+</script> 
