@@ -1,121 +1,133 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="max-w-6xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">瞑想記録</h1>
-      <div class="flex space-x-4">
-        <%= link_to "音楽ライブラリ", music_index_path,
-            class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
-        <%= link_to "新規記録", new_meditation_record_path,
-            class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+<div class="container mx-auto px-4 py-8" style="height: 100vh; display: flex; flex-direction: column;">
+  <!-- 上部70%: カレンダー -->
+  <div style="flex: 7 1 0%; min-height: 0;">
+    <%= month_calendar events: @meditation_records, event_strftime: "%Y-%m-%d" do |date, records| %>
+      <div style="height: 80px;">
+        <span class="font-bold"><%= date.day %></span><br>
+        <% if records.present? %>
+          <span class="text-blue-600 font-semibold text-lg"><%= records.count %>回</span>
+        <% end %>
       </div>
+    <% end %>
+  </div>
+
+  <!-- 下部30%: 今月の集計テキストと瞑想記録・統計カード・記録一覧 -->
+  <div style="flex: 3 1 0%; min-height: 0; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <div class="bg-white shadow rounded-lg p-6 w-full max-w-xl text-center mb-6">
+      <p class="text-xl font-bold mb-2">今月の集計</p>
+      <p>瞑想トータル回数: <span class="font-semibold text-blue-700"><%= @total_count %></span> 回</p>
+      <p>瞑想した日数: <span class="font-semibold text-green-700"><%= @active_days %></span> 日</p>
+      <p>合計瞑想時間: <span class="font-semibold text-purple-700"><%= @total_minutes %></span> 分</p>
     </div>
 
-    <!-- 統計情報 -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-      <div class="bg-white shadow rounded-lg p-6">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
+    <!-- ここに瞑想記録タイトルと統計カードを移動 -->
+    <div class="max-w-6xl mx-auto w-full">
+      <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-900">瞑想記録</h1>
+        <div class="flex space-x-4">
+          <%= link_to "音楽ライブラリ", music_path,
+              class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+          <%= link_to "新規記録", new_meditation_record_path,
+              class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+        </div>
+      </div>
+
+      <!-- 統計情報 -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white shadow rounded-lg p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-500">総瞑想回数</p>
+              <p class="text-2xl font-semibold text-gray-900"><%= @total_sessions %></p>
+            </div>
           </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-gray-500">総瞑想回数</p>
-            <p class="text-2xl font-semibold text-gray-900"><%= @total_sessions %></p>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-green-100 text-green-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-500">総瞑想時間</p>
+              <p class="text-2xl font-semibold text-gray-900"><%= @total_duration %>分</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white shadow rounded-lg p-6">
+          <div class="flex items-center">
+            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div class="ml-4">
+              <p class="text-sm font-medium text-gray-500">瞑想日数</p>
+              <p class="text-2xl font-semibold text-gray-900"><%= @total_days %></p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="bg-white shadow rounded-lg p-6">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-green-100 text-green-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-          </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-gray-500">総瞑想時間</p>
-            <p class="text-2xl font-semibold text-gray-900"><%= @total_duration %>分</p>
-          </div>
+      <!-- 記録一覧 -->
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">記録一覧</h2>
         </div>
-      </div>
-
-      <div class="bg-white shadow rounded-lg p-6">
-        <div class="flex items-center">
-          <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-            </svg>
-          </div>
-          <div class="ml-4">
-            <p class="text-sm font-medium text-gray-500">瞑想日数</p>
-            <p class="text-2xl font-semibold text-gray-900"><%= @total_days %></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 記録一覧 -->
-    <div class="bg-white shadow rounded-lg overflow-hidden">
-      <div class="px-6 py-4 border-b border-gray-200">
-        <h2 class="text-lg font-semibold text-gray-900">記録一覧</h2>
-      </div>
-      
-      <% if @meditation_records.any? %>
-        <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日付</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">時間</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">メモ</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <% @meditation_records.each do |record| %>
-                <tr class="hover:bg-gray-50">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                    <%= record.date.strftime("%Y年%m月%d日") %>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <%= record.duration %>分
-                  </td>
-                  <td class="px-6 py-4 text-sm text-gray-500">
-                    <div class="max-w-xs truncate" title="<%= record.notes %>">
-                      <%= record.notes %>
-                    </div>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                    <div class="flex space-x-2">
-                      <%= link_to "詳細", meditation_record_path(record),
-                          class: "text-blue-600 hover:text-blue-900" %>
-                      <%= link_to "編集", edit_meditation_record_path(record),
-                          class: "text-green-600 hover:text-green-900" %>
-                      <%= link_to "削除", meditation_record_path(record),
-                          method: :delete,
-                          data: { confirm: "この記録を削除しますか？" },
-                          class: "text-red-600 hover:text-red-900" %>
-                    </div>
-                  </td>
+        <% if @meditation_records.any? %>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">日付</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">時間</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">メモ</th>
+                  <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
                 </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% else %>
-        <div class="text-center py-12">
-          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-          </svg>
-          <h3 class="mt-2 text-sm font-medium text-gray-900">記録がありません</h3>
-          <p class="mt-1 text-sm text-gray-500">瞑想を開始して記録を作成しましょう。</p>
-          <div class="mt-6">
-            <%= link_to "新規記録を作成", new_meditation_record_path,
-                class: "inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700" %>
+              </thead>
+              <tbody class="bg-white divide-y divide-gray-200">
+                <% @meditation_records.each do |record| %>
+                  <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <%= record.date.strftime("%Y年%m月%d日") %>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <%= record.duration %>分
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-500">
+                      <div class="max-w-xs truncate" title="<%= record.notes %>">
+                        <%= record.notes %>
+                      </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div class="flex space-x-2">
+                        <%= link_to "詳細", meditation_record_path(record),
+                            class: "text-blue-600 hover:text-blue-900" %>
+                        <%= link_to "編集", edit_meditation_record_path(record),
+                            class: "text-green-600 hover:text-green-900" %>
+                        <%= link_to "削除", meditation_record_path(record),
+                            method: :delete,
+                            data: { confirm: "この記録を削除しますか？" },
+                            class: "text-red-600 hover:text-red-900" %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
           </div>
-        </div>
-      <% end %>
+        <% else %>
+          <div class="p-6 text-gray-500">記録がありません。</div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div> 

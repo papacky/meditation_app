@@ -72,7 +72,7 @@ Google Driveの音楽ファイルを再生し、その再生をトリガーに�
 
 1. **開発環境での環境変数設定**
    ```bash
-   # .envファイルを作成（gitignoreに追加済み）
+   # .envファイルを作成（gitignoreに追加済み）　7月2日実施
    echo "GOOGLE_CLIENT_ID=your_google_client_id_here" > .env
    echo "GOOGLE_CLIENT_SECRET=your_google_client_secret_here" >> .env
    ```
@@ -90,18 +90,22 @@ Google Driveの音楽ファイルを再生し、その再生をトリガーに�
 
 ### 動作確認手順
 
-1. **Google OAuth認証**
+1. **Google OAuth認証**  7月2日実施
+　　⇒【重要】OmniAuth 2.x系の仕様変更について（この修正が３時間できなかった！！）
+　　　OmniAuth 2.x 以降、CSRF対策のため、デフォルトで「/auth/:provider」へのGET
+　　　リクエストが許可されていません。この場合、config/initializers/omniauth.rb 
+　　　に下記を追加することでGETも許可できます。
    - アプリにアクセス → "Google Driveに接続" ボタンをクリック
    - Googleアカウントで認証 → 音楽ライブラリ画面に遷移
 
-2. **音楽ファイル表示**
+2. **音楽ファイル表示**　 7月3日予定
    - Google Driveの音楽ファイル（mp3, wav, flac, m4a, aac, ogg）が一覧表示
 
-3. **音楽再生・瞑想記録**
+3. **音楽再生・瞑想記録**　7月3日予定
    - 音楽ファイルの "再生" ボタンをクリック
    - 音楽再生画面で "瞑想開始" → "瞑想終了" → "記録を保存"
 
-4. **記録確認**
+4. **記録確認**　7月3日予定
    - "瞑想記録を見る" で記録一覧と統計を確認
 
 ---

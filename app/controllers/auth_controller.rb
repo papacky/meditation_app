@@ -18,7 +18,10 @@ class AuthController < ApplicationController
   end
 
   def logout
-    session.clear
-    redirect_to root_path, notice: 'ログアウトしました。'
+    reset_session
+    redirect_to new_user_session_path, notice: 'ログアウトしました。'
+  end
+
+  def logout_complete
   end
 end 

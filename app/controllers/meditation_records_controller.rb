@@ -2,10 +2,20 @@ class MeditationRecordsController < ApplicationController
   before_action :set_meditation_record, only: [:show, :edit, :update, :destroy]
 
   def index
-    @meditation_records = MeditationRecord.order(date: :desc)
-    @total_sessions = @meditation_records.count
-    @total_duration = @meditation_records.sum(:duration)
-    @total_days = @meditation_records.distinct.count(:date)
+    # 今月の開始日と終了日
+    start_date = Date.current.beginning_of_month
+    end_date = Date.current.end_of_month
+
+    # 今月の瞑想記録を日付ごとに取得
+    @meditation_records = MeditationRecord.where(user: current_user, date: start_date..end_date)
+
+    # 日付ごとの実施回数（カレンダー用）
+    @records_by_date = @meditation_records.group(:date).count
+
+    # 集計用
+    @total_count = @meditation_records.count
+    @active_days = @records_by_date.keys.size
+    @total_minutes = @meditation_records.sum(:duration) # durationカラムがなければ適宜修正
   end
 
   def show
