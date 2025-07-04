@@ -63,5 +63,44 @@ document.addEventListener('turbo:load', function() {
     const minutes = Math.ceil(audio.currentTime / 60);
     meditationDuration.value = minutes;
   });
+
+  // 音楽再生開始時に55分後にトークンリフレッシュAPIを呼ぶ
+  let refreshTimer = null;
+  audio.addEventListener('play', function() {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+    }
+    refreshTimer = setTimeout(function() {
+      fetch('/refresh_google_token', {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          console.log('トークンリフレッシュ成功');
+        } else {
+          alert('トークンリフレッシュ失敗。再ログインが必要です。');
+        }
+      });
+    }, 55 * 60 * 1000); // 55分後
+  });
+
+  // 一時停止や終了時はタイマーをクリア
+  audio.addEventListener('pause', function() {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+      refreshTimer = null;
+    }
+  });
+  audio.addEventListener('ended', function() {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+      refreshTimer = null;
+    }
+  });
 });
 </script> 

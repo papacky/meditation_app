@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get '/auth/failure', to: 'auth#failure'
   get '/logout', to: 'auth#logout'
   get '/logout_complete', to: 'auth#logout_complete', as: 'logout_complete'
+  post 'refresh_google_token', to: 'auth#refresh_google_token'
 
   # 音楽ファイル管理
   get '/music', to: 'music#index'

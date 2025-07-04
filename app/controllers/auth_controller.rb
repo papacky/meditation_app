@@ -24,4 +24,23 @@ class AuthController < ApplicationController
 
   def logout_complete
   end
+
+  def refresh_google_token
+    if session[:google_refresh_token].present?
+      google_drive_service = GoogleDriveService.new(
+        session[:google_access_token],
+        session[:google_refresh_token],
+        ENV['GOOGLE_CLIENT_ID'],
+        ENV['GOOGLE_CLIENT_SECRET']
+      )
+      if google_drive_service.refresh_access_token
+        session[:google_access_token] = google_drive_service.access_token
+        render json: { success: true }
+      else
+        render json: { success: false }, status: :unauthorized
+      end
+    else
+      render json: { success: false }, status: :unauthorized
+    end
+  end
 end 
