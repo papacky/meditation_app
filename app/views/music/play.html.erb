@@ -24,7 +24,20 @@
       <div class="border-t pt-6">
         <h3 class="text-lg font-semibold text-gray-800 mb-4">瞑想記録</h3>
         
+        <% if @meditation_record && @meditation_record.errors.any? %>
+          <div class="mb-4 p-4 bg-red-100 text-red-700 rounded">
+            <h4>エラーがあります:</h4>
+            <ul>
+              <% @meditation_record.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
         <%= form_with model: @meditation_record, local: true, id: "meditation-form", data: { turbo: false } do |form| %>
+          <%= form.hidden_field :file_id, value: @file_id %>
+          <%= form.hidden_field :file_name, value: @file_name %>
           <div class="mb-4">
             <%= form.label :duration, "瞑想時間（分）", class: "block text-sm font-medium text-gray-700 mb-2" %>
             <%= form.number_field :duration, id: "meditation-duration", 
@@ -102,5 +115,24 @@ document.addEventListener('turbo:load', function() {
       refreshTimer = null;
     }
   });
+
+  // ブラウザを開いてから55分後にもトークンリフレッシュAPIを呼ぶ
+  setTimeout(function() {
+    fetch('/refresh_google_token', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        console.log('（ブラウザ起動55分後）トークンリフレッシュ成功');
+      } else {
+        alert('（ブラウザ起動55分後）トークンリフレッシュ失敗。再ログインが必要です。');
+      }
+    });
+  }, 55 * 60 * 1000); // 55分後
 });
 </script> 

@@ -16,6 +16,12 @@ class MeditationRecordsController < ApplicationController
     @total_count = @meditation_records.count
     @active_days = @records_by_date.keys.size
     @total_minutes = @meditation_records.sum(:duration) # durationカラムがなければ適宜修正
+
+    # 全期間の累計
+    all_records = MeditationRecord.where(user: current_user)
+    @total_sessions = all_records.count
+    @total_duration = all_records.sum(:duration)
+    @total_days = all_records.select(:date).distinct.count
   end
 
   def show
@@ -30,11 +36,15 @@ class MeditationRecordsController < ApplicationController
 
   def create
     @meditation_record = MeditationRecord.new(meditation_record_params)
+    @meditation_record.user = current_user
+    @meditation_record.date ||= Date.current  # dateがnilなら今日をセット
 
     if @meditation_record.save
       redirect_to @meditation_record, notice: '瞑想記録が作成されました。'
     else
-      render :new, status: :unprocessable_entity
+      @file_id = params[:meditation_record][:file_id] if params[:meditation_record]
+      @file_name = params[:meditation_record][:file_name] if params[:meditation_record]
+      render 'music/play', status: :unprocessable_entity
     end
   end
 
@@ -72,6 +82,6 @@ class MeditationRecordsController < ApplicationController
   end
 
   def meditation_record_params
-    params.require(:meditation_record).permit(:date, :duration, :notes)
+    params.require(:meditation_record).permit(:date, :duration, :notes, :file_id, :file_name)
   end
 end 
