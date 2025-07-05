@@ -79,26 +79,42 @@ document.addEventListener('turbo:load', function() {
 
   // 音楽再生開始時に55分後にトークンリフレッシュAPIを呼ぶ
   let refreshTimer = null;
+  
+  function performTokenRefresh(source) {
+    console.log(`トークンリフレッシュ開始 (${source})`);
+    fetch('/refresh_google_token', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('トークンリフレッシュレスポンス:', data);
+      if (data.success) {
+        console.log(`トークンリフレッシュ成功 (${source}): ${data.message}`);
+        // 成功時は特に何もしない（セッションは既に更新済み）
+      } else {
+        console.error(`トークンリフレッシュ失敗 (${source}): ${data.message}`);
+        alert(`トークンリフレッシュ失敗 (${source}): ${data.message}`);
+        // 失敗時は音楽ライブラリページに戻る
+        window.location.href = '/music';
+      }
+    })
+    .catch(error => {
+      console.error('トークンリフレッシュエラー:', error);
+      alert('トークンリフレッシュでエラーが発生しました。再ログインが必要です。');
+      window.location.href = '/music';
+    });
+  }
+  
   audio.addEventListener('play', function() {
     if (refreshTimer) {
       clearTimeout(refreshTimer);
     }
     refreshTimer = setTimeout(function() {
-      fetch('/refresh_google_token', {
-        method: 'POST',
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          console.log('トークンリフレッシュ成功');
-        } else {
-          alert('トークンリフレッシュ失敗。再ログインが必要です。');
-        }
-      });
+      performTokenRefresh('音楽再生55分後');
     }, 55 * 60 * 1000); // 55分後
   });
 
@@ -117,22 +133,16 @@ document.addEventListener('turbo:load', function() {
   });
 
   // ブラウザを開いてから55分後にもトークンリフレッシュAPIを呼ぶ
+  // デバッグ用: 開発環境では2分後にもテスト実行
+  const isDebugMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  if (isDebugMode) {
+    setTimeout(function() {
+      performTokenRefresh('デバッグ用2分後テスト');
+    }, 2 * 60 * 1000); // 2分後（デバッグ用）
+  }
+  
   setTimeout(function() {
-    fetch('/refresh_google_token', {
-      method: 'POST',
-      headers: {
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        console.log('（ブラウザ起動55分後）トークンリフレッシュ成功');
-      } else {
-        alert('（ブラウザ起動55分後）トークンリフレッシュ失敗。再ログインが必要です。');
-      }
-    });
+    performTokenRefresh('ブラウザ起動55分後');
   }, 55 * 60 * 1000); // 55分後
 });
 </script> 

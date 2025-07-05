@@ -4,7 +4,12 @@ class MusicController < ApplicationController
   def index
     if session[:google_access_token]
       begin
-        service = GoogleDriveService.new(session[:google_access_token])
+        service = GoogleDriveService.new(
+          session[:google_access_token],
+          session[:google_refresh_token],
+          ENV['GOOGLE_CLIENT_ID'],
+          ENV['GOOGLE_CLIENT_SECRET']
+        )
         @music_files = service.list_music_files
       rescue => e
         @music_files = []
@@ -20,7 +25,12 @@ class MusicController < ApplicationController
     @file_name = params[:file_name]
     
     if session[:google_access_token]
-      service = GoogleDriveService.new(session[:google_access_token])
+      service = GoogleDriveService.new(
+        session[:google_access_token],
+        session[:google_refresh_token],
+        ENV['GOOGLE_CLIENT_ID'],
+        ENV['GOOGLE_CLIENT_SECRET']
+      )
       @file_metadata = service.get_file_metadata(@file_id)
     end
     

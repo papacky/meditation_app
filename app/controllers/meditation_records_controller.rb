@@ -57,8 +57,12 @@ class MeditationRecordsController < ApplicationController
   end
 
   def destroy
-    @meditation_record.destroy
-    redirect_to meditation_records_url, notice: '瞑想記録が削除されました。'
+    if @meditation_record.user == current_user
+      @meditation_record.destroy
+      redirect_to meditation_records_url, notice: '瞑想記録が削除されました。'
+    else
+      redirect_to meditation_records_url, alert: '削除権限がありません。'
+    end
   end
 
   def create_from_music
@@ -78,7 +82,7 @@ class MeditationRecordsController < ApplicationController
   private
 
   def set_meditation_record
-    @meditation_record = MeditationRecord.find(params[:id])
+    @meditation_record = MeditationRecord.where(user: current_user).find(params[:id])
   end
 
   def meditation_record_params

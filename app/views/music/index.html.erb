@@ -68,9 +68,104 @@
       </div>
     <% end %>
 
-    <div class="mt-8">
+    <div class="mt-8 flex space-x-4">
       <%= link_to "瞑想記録を見る", meditation_records_path,
           class: "bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" %>
+      <% if session[:google_access_token] %>
+        <button id="test-token-refresh" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+          トークンリフレッシュテスト
+        </button>
+        <button id="debug-session" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+          セッション状態確認
+        </button>
+      <% end %>
     </div>
   </div>
-</div> 
+</div>
+
+<% if session[:google_access_token] %>
+<script>
+document.addEventListener('turbo:load', function() {
+  console.log('音楽ライブラリページ: JavaScript読み込み完了');
+  console.log('Google認証状態:', '<%= session[:google_access_token].present? %>');
+  console.log('現在時刻:', new Date().toLocaleString());
+  
+  function performTokenRefresh(source) {
+    console.log(`トークンリフレッシュ開始 (${source})`);
+    fetch('/refresh_google_token', {
+      method: 'POST',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('トークンリフレッシュレスポンス:', data);
+      if (data.success) {
+        console.log(`トークンリフレッシュ成功 (${source}): ${data.message}`);
+        // 成功時は特に何もしない（セッションは既に更新済み）
+      } else {
+        console.error(`トークンリフレッシュ失敗 (${source}): ${data.message}`);
+        alert(`トークンリフレッシュ失敗 (${source}): ${data.message}`);
+        // 失敗時は再ログインページに移動
+        window.location.href = '/auth/google_oauth2';
+      }
+    })
+    .catch(error => {
+      console.error('トークンリフレッシュエラー:', error);
+      alert('トークンリフレッシュでエラーが発生しました。再ログインが必要です。');
+      window.location.href = '/auth/google_oauth2';
+    });
+  }
+
+  // デバッグ用: 開発環境では2分後にもテスト実行
+  const isDebugMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  console.log('デバッグモード:', isDebugMode, 'ホスト名:', window.location.hostname);
+  
+  if (isDebugMode) {
+    console.log('デバッグ用2分タイマーを設定しました');
+    setTimeout(function() {
+      performTokenRefresh('音楽ライブラリ・デバッグ用2分後テスト');
+    }, 2 * 60 * 1000); // 2分後（デバッグ用）
+  }
+  
+  // ページ読み込み後55分でトークンリフレッシュ
+  console.log('55分タイマーを設定しました');
+  setTimeout(function() {
+    performTokenRefresh('音楽ライブラリ55分後');
+  }, 55 * 60 * 1000); // 55分後
+  
+  // テストボタンのイベントリスナー
+  const testButton = document.getElementById('test-token-refresh');
+  if (testButton) {
+    testButton.addEventListener('click', function() {
+      performTokenRefresh('手動テスト');
+    });
+    console.log('テストボタンのイベントリスナーを設定しました');
+  }
+  
+  // セッション状態確認ボタンのイベントリスナー
+  const debugButton = document.getElementById('debug-session');
+  if (debugButton) {
+    debugButton.addEventListener('click', function() {
+      fetch('/debug_session', {
+        method: 'GET',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('セッション状態:', data);
+        alert(`セッション状態:\n- アクセストークン: ${data.access_token_present ? '存在' : '不存在'}\n- リフレッシュトークン: ${data.refresh_token_present ? '存在' : '不存在'}\n- ユーザー: ${data.user_name}\n- メール: ${data.user_email}`);
+      })
+      .catch(error => {
+        console.error('セッション状態取得エラー:', error);
+      });
+    });
+    console.log('セッション状態確認ボタンのイベントリスナーを設定しました');
+  }
+});
+</script>
+<% end %> 
