@@ -3,21 +3,23 @@
     <div class="flex justify-between items-center mb-8">
       <h1 class="text-3xl font-bold text-gray-900">瞑想音楽ライブラリ</h1>
       <div class="flex space-x-4">
-        <% if session[:google_access_token] %>
+        <% if user_signed_in? %>
           <span class="text-sm text-gray-600">
-            ログイン中: <%= session[:user_name] %>
+            ログイン中: <%= current_user.email %>
           </span>
-          <%= link_to "ログアウト", logout_path, 
+          <%= link_to "ログアウト", destroy_user_session_path, 
               class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
-              method: :get %>
+              method: :delete %>
         <% else %>
-          <%= link_to "Google Driveに接続", "/auth/google_oauth2", 
-              class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+          <%= link_to "ログイン", new_user_session_path, 
+              class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2" %>
+          <%= link_to "新規登録", new_user_registration_path, 
+              class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
         <% end %>
       </div>
     </div>
 
-    <% if session[:google_access_token] %>
+    <% if user_signed_in? %>
       <div class="bg-white shadow rounded-lg p-6">
         <h1 class="text-2xl font-semibold mb-4">音楽メニュー</h1>
         
@@ -38,9 +40,14 @@
           </div>
         <% else %>
           <div class="text-center py-8">
-            <p class="text-gray-500">音楽ファイルが見つかりませんでした。</p>
-            <p class="text-sm text-gray-400 mt-2">
-              Google Driveに音楽ファイル（mp3, wav, flac, m4a, aac, ogg）をアップロードしてください。
+            <div class="mb-6">
+              <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+              </svg>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">音楽ファイルが見つかりません</h2>
+            <p class="text-gray-600 mb-6">
+              管理者のGoogle Driveに音楽ファイルが設定されていないか、接続に問題があります。
             </p>
           </div>
         <% end %>
@@ -49,42 +56,36 @@
       <div class="bg-white shadow rounded-lg p-8 text-center">
         <div class="mb-6">
           <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
           </svg>
         </div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">Google Driveに接続してください</h2>
+        <h2 class="text-2xl font-bold text-gray-900 mb-4">ログインまたは新規登録してください</h2>
         <p class="text-gray-600 mb-6">
-          瞑想音楽を再生するには、Google Driveアカウントとの連携が必要です。
+          瞑想音楽ライブラリにアクセスするには、アカウントが必要です。
         </p>
-        <%= link_to "Google Driveに接続", "/auth/google_oauth2", 
-            class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg" %>
+        <div class="space-y-4">
+          <%= link_to "ログイン", new_user_session_path, 
+              class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg mr-4" %>
+          <%= link_to "新規登録", new_user_registration_path, 
+              class: "bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg" %>
+        </div>
       </div>
     <% end %>
 
-    <div class="mt-8 flex space-x-4">
-      <%= link_to "瞑想記録を見る", meditation_records_path,
-          class: "bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" %>
-      <% if session[:google_access_token] %>
-        <button id="test-token-refresh" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
-          トークンリフレッシュテスト
-        </button>
-        <button id="debug-session" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-          セッション状態確認
-        </button>
-      <% end %>
-    </div>
+    <% if user_signed_in? %>
+      <div class="mt-8">
+        <%= link_to "瞑想記録を見る", meditation_records_path,
+            class: "bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" %>
+      </div>
+    <% end %>
   </div>
 </div>
 
 <% if session[:google_access_token] %>
 <script>
 document.addEventListener('turbo:load', function() {
-  console.log('音楽ライブラリページ: JavaScript読み込み完了');
-  console.log('Google認証状態:', '<%= session[:google_access_token].present? %>');
-  console.log('現在時刻:', new Date().toLocaleString());
-  
-  function performTokenRefresh(source) {
-    console.log(`トークンリフレッシュ開始 (${source})`);
+  // 本番環境用のトークンリフレッシュ処理
+  function performTokenRefresh() {
     fetch('/refresh_google_token', {
       method: 'POST',
       headers: {
@@ -94,71 +95,21 @@ document.addEventListener('turbo:load', function() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('トークンリフレッシュレスポンス:', data);
-      if (data.success) {
-        console.log(`トークンリフレッシュ成功 (${source}): ${data.message}`);
-        // 成功時は特に何もしない（セッションは既に更新済み）
-      } else {
-        console.error(`トークンリフレッシュ失敗 (${source}): ${data.message}`);
-        alert(`トークンリフレッシュ失敗 (${source}): ${data.message}`);
+      if (!data.success) {
         // 失敗時は再ログインページに移動
         window.location.href = '/auth/google_oauth2';
       }
     })
     .catch(error => {
-      console.error('トークンリフレッシュエラー:', error);
-      alert('トークンリフレッシュでエラーが発生しました。再ログインが必要です。');
+      // エラー時も再ログインページに移動
       window.location.href = '/auth/google_oauth2';
     });
   }
-
-  // デバッグ用: 開発環境では2分後にもテスト実行
-  const isDebugMode = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  console.log('デバッグモード:', isDebugMode, 'ホスト名:', window.location.hostname);
-  
-  if (isDebugMode) {
-    console.log('デバッグ用2分タイマーを設定しました');
-    setTimeout(function() {
-      performTokenRefresh('音楽ライブラリ・デバッグ用2分後テスト');
-    }, 2 * 60 * 1000); // 2分後（デバッグ用）
-  }
   
   // ページ読み込み後55分でトークンリフレッシュ
-  console.log('55分タイマーを設定しました');
   setTimeout(function() {
-    performTokenRefresh('音楽ライブラリ55分後');
+    performTokenRefresh();
   }, 55 * 60 * 1000); // 55分後
-  
-  // テストボタンのイベントリスナー
-  const testButton = document.getElementById('test-token-refresh');
-  if (testButton) {
-    testButton.addEventListener('click', function() {
-      performTokenRefresh('手動テスト');
-    });
-    console.log('テストボタンのイベントリスナーを設定しました');
-  }
-  
-  // セッション状態確認ボタンのイベントリスナー
-  const debugButton = document.getElementById('debug-session');
-  if (debugButton) {
-    debugButton.addEventListener('click', function() {
-      fetch('/debug_session', {
-        method: 'GET',
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('セッション状態:', data);
-        alert(`セッション状態:\n- アクセストークン: ${data.access_token_present ? '存在' : '不存在'}\n- リフレッシュトークン: ${data.refresh_token_present ? '存在' : '不存在'}\n- ユーザー: ${data.user_name}\n- メール: ${data.user_email}`);
-      })
-      .catch(error => {
-        console.error('セッション状態取得エラー:', error);
-      });
-    });
-    console.log('セッション状態確認ボタンのイベントリスナーを設定しました');
-  }
 });
 </script>
 <% end %> 
