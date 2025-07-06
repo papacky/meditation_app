@@ -2,26 +2,39 @@ class MeditationRecordsController < ApplicationController
   before_action :set_meditation_record, only: [:show, :edit, :update, :destroy]
 
   def index
-    # 今月の開始日と終了日
-    start_date = Date.current.beginning_of_month
-    end_date = Date.current.end_of_month
+    # カレンダーで表示中の月を取得（パラメータがない場合は今月）
+    if params[:start_date].present?
+      current_date = Date.parse(params[:start_date])
+    else
+      current_date = Date.current
+    end
+    
+    start_date = current_date.beginning_of_month
+    end_date = current_date.end_of_month
 
-    # 今月の瞑想記録を日付ごとに取得
+    # 表示中の月の瞑想記録を日付ごとに取得
     @meditation_records = MeditationRecord.where(user: current_user, date: start_date..end_date)
 
     # 日付ごとの実施回数（カレンダー用）
     @records_by_date = @meditation_records.group(:date).count
 
-    # 集計用
+    # 表示中の月の集計用
     @total_count = @meditation_records.count
     @active_days = @records_by_date.keys.size
-    @total_minutes = @meditation_records.sum(:duration) # durationカラムがなければ適宜修正
+    @total_minutes = @meditation_records.sum(:duration)
+    @current_month_name = current_date.strftime("%Y年%-m月")
 
     # 全期間の累計
     all_records = MeditationRecord.where(user: current_user)
     @total_sessions = all_records.count
     @total_duration = all_records.sum(:duration)
     @total_days = all_records.select(:date).distinct.count
+  end
+
+  def list
+    # 記録一覧ページ用のアクション
+    @meditation_records = MeditationRecord.where(user: current_user)
+                                         .order(date: :desc, created_at: :desc)
   end
 
   def show

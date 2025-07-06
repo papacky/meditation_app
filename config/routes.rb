@@ -20,7 +20,11 @@ Rails.application.routes.draw do
   get '/music/stream/:file_id', to: 'music#stream', as: 'music_stream'
 
   # 瞑想記録管理
-  resources :meditation_records
+  resources :meditation_records do
+    collection do
+      get :list
+    end
+  end
   post '/meditation_records/create_from_music', to: 'meditation_records#create_from_music'
 
   # Defines the root path route ("/")

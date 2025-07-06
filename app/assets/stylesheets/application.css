@@ -13,3 +13,68 @@
  *= require_tree .
  *= require_self
  */
+
+/* カレンダーの中央配置と幅の調整 */
+.simple-calendar {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.simple-calendar table {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.simple-calendar tr {
+  height: 55px;
+}
+
+.simple-calendar td {
+  text-align: center;
+  vertical-align: top;
+  border: 1px solid #e5e7eb;
+  padding: 8px;
+  width: 14.28%;
+  height: 55px;
+  max-height: 55px;
+  overflow: hidden;
+}
+
+.simple-calendar th {
+  text-align: center;
+  padding: 12px 8px;
+  background-color: #f9fafb;
+  font-weight: 600;
+  border: 1px solid #e5e7eb;
+  width: 14.28%;
+}
+
+/* simple_calendarのヘッダーは表示したまま、JavaScriptで月タイトルのみを削除 */
+
+/* simple_calendarのナビゲーション（前月・今月・翌月）のフォント統一 */
+.simple-calendar .calendar-heading a {
+  font-family: inherit;
+  font-weight: 500;
+  color: #374151;
+  text-decoration: none;
+}
+
+.simple-calendar .calendar-heading a:hover {
+  color: #1f2937;
+  text-decoration: underline;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .simple-calendar td {
+    padding: 4px;
+    font-size: 14px;
+  }
+  
+  .simple-calendar th {
+    padding: 8px 4px;
+    font-size: 14px;
+  }
+}
