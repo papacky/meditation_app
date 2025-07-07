@@ -69,7 +69,7 @@ class GoogleDriveService
         Rails.logger.info "Google access token refreshed successfully"
         return true
       else
-        Rails.logger.error "Failed to refresh Google access token: #{response.body}"
+        Rails.logger.error "Failed to refresh Google access token. Response Code: #{response.code}, Body: #{response.body}"
         return false
       end
     rescue => e

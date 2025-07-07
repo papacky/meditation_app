@@ -28,12 +28,11 @@
             <% @music_files.each do |file| %>
               <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
                 <div class="mb-3">
-                  <h3 class="font-medium text-gray-900 truncate" title="<%= file.name %>">
-                    <%= file.name %>
+                  <h3 class="font-medium text-gray-900 truncate" title="<%= file %>">
+                    <%= file %>
                   </h3>
                 </div>
-                
-                <%= link_to "再生", music_play_path(file_id: file.id, file_name: file.name),
+                <%= link_to "選択", music_play_path(file_name: file),
                     class: "w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center block" %>
               </div>
             <% end %>
@@ -47,7 +46,7 @@
             </div>
             <h2 class="text-2xl font-bold text-gray-900 mb-4">音楽ファイルが見つかりません</h2>
             <p class="text-gray-600 mb-6">
-              管理者のGoogle Driveに音楽ファイルが設定されていないか、接続に問題があります。
+              public/music フォルダに音楽ファイル（mp3等）を配置してください。
             </p>
           </div>
         <% end %>

@@ -13,6 +13,10 @@ Rails.application.routes.draw do
   get '/logout_complete', to: 'auth#logout_complete', as: 'logout_complete'
   post 'refresh_google_token', to: 'auth#refresh_google_token'
 
+  # 管理者Google認証用ルート (一時的)
+  get '/admin_auth_initiate', to: 'auth#admin_auth_initiate'
+  get '/admin_auth/google_oauth2/callback', to: 'auth#admin_google_oauth2_callback'
+
   # 音楽ファイル管理
   get '/music', to: 'music#index'
   get '/music/play', to: 'music#play'

@@ -54,7 +54,7 @@ class MeditationRecordsController < ApplicationController
     @meditation_record.date ||= Date.current  # dateがnilなら今日をセット
 
     if @meditation_record.save
-      redirect_to @meditation_record, notice: '瞑想記録が作成されました。'
+      redirect_to list_meditation_records_path, notice: '瞑想記録が作成されました。'
     else
       @file_id = params[:meditation_record][:file_id] if params[:meditation_record]
       @file_name = params[:meditation_record][:file_name] if params[:meditation_record]
