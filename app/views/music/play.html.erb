@@ -60,6 +60,9 @@
             </div>
             
             <%= form_with scope: :meditation_record, url: meditation_records_path, local: true, data: { turbo: false }, class: "space-y-6", html: { id: 'meditation-form' } do |form| %>
+              <!-- 音楽ファイル名を隠しフィールドとして追加 -->
+              <%= form.hidden_field :file_name, value: @file_name %>
+              
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <%= form.label :date, "日付", class: "block text-sm font-semibold text-gray-700 mb-2" %>

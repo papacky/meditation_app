@@ -45,11 +45,12 @@
               <%= month_calendar events: @meditation_records, event_strftime: "%Y-%m-%d" do |date, records| %>
                 <% current_month = params[:start_date].present? ? Date.parse(params[:start_date]) : Date.current %>
                 <% if date.month == current_month.month && date.year == current_month.year %>
-                  <div class="h-16 flex flex-col items-center justify-center p-2 hover:bg-blue-50 rounded-lg transition-colors">
+                  <div class="h-16 flex flex-col items-center justify-start p-2 hover:bg-blue-50 rounded-lg transition-colors">
                     <span class="font-semibold text-gray-700"><%= date.day %></span>
                     <% if records.present? %>
                       <div class="mt-1">
-                        <span class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-sm font-bold px-2 py-1 rounded-full">
+                        <span class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-full
+                          text-base md:text-lg px-1 py-0.5 md:px-2 md:py-1 truncate">
                           <%= records.count %>回
                         </span>
                       </div>
@@ -86,7 +87,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-600">瞑想回数</p>
-                <p class="text-3xl font-bold text-gray-900"><%= @total_count %></p>
+                <p class="text-2xl font-bold text-gray-900"><%= @total_count %></p>
               </div>
             </div>
           </div>
@@ -100,7 +101,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-600">瞑想時間</p>
-                <p class="text-3xl font-bold text-gray-900"><%= format_duration(@total_minutes) %></p>
+                <p class="text-2xl font-bold text-gray-900"><%= format_duration(@total_minutes) %></p>
               </div>
             </div>
           </div>
@@ -114,7 +115,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-600">瞑想日数</p>
-                <p class="text-3xl font-bold text-gray-900"><%= @active_days %>日</p>
+                <p class="text-2xl font-bold text-gray-900"><%= @active_days %>日</p>
               </div>
             </div>
           </div>
@@ -143,7 +144,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-600">瞑想回数</p>
-                <p class="text-3xl font-bold text-gray-900"><%= @total_sessions %></p>
+                <p class="text-2xl font-bold text-gray-900"><%= @total_sessions %></p>
               </div>
             </div>
           </div>
@@ -157,7 +158,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-600">瞑想時間</p>
-                <p class="text-3xl font-bold text-gray-900"><%= format_duration(@total_duration) %></p>
+                <p class="text-2xl font-bold text-gray-900"><%= format_duration(@total_duration) %></p>
               </div>
             </div>
           </div>
@@ -171,7 +172,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-600">瞑想日数</p>
-                <p class="text-3xl font-bold text-gray-900"><%= @total_days %>日</p>
+                <p class="text-2xl font-bold text-gray-900"><%= @total_days %>日</p>
               </div>
             </div>
           </div>

@@ -1,45 +1,70 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="max-w-xl mx-auto bg-white shadow rounded-lg p-8">
-    <h1 class="text-2xl font-bold text-gray-900 mb-6">瞑想記録の編集</h1>
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-teal-100">
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-2xl mx-auto">
+      <!-- ヘッダー部分 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <div class="flex items-center space-x-4">
+          <div class="h-12 w-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg flex items-center justify-center">
+            <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">瞑想記録の編集</h1>
+            <p class="text-gray-600">記録の内容を修正できます</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 編集フォーム -->
+      <div class="bg-white rounded-lg shadow-lg p-8">
     
-    <% if @meditation_record.errors.any? %>
-      <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-        <h2 class="font-bold">エラーが発生しました：</h2>
-        <ul class="list-disc list-inside">
-          <% @meditation_record.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
+        <% if @meditation_record.errors.any? %>
+          <div class="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 text-red-700 rounded-lg">
+            <div class="flex items-center mb-2">
+              <svg class="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+              </svg>
+              <h2 class="font-bold">エラーが発生しました：</h2>
+            </div>
+            <ul class="list-disc list-inside ml-6">
+              <% @meditation_record.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
 
-    <%= form_with(model: @meditation_record, local: true, class: "space-y-6") do |form| %>
-      <div>
-        <%= form.label :date, "日付", class: "block text-sm font-medium text-gray-700 mb-2" %>
-        <%= form.date_field :date, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
-      </div>
+        <%= form_with(model: @meditation_record, local: true, class: "space-y-6") do |form| %>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <%= form.label :date, "日付", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+              <%= form.date_field :date, class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors" %>
+            </div>
 
-      <div>
-        <%= form.label :duration, "瞑想時間（分）", class: "block text-sm font-medium text-gray-700 mb-2" %>
-        <%= form.number_field :duration, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500", min: 1 %>
-      </div>
+            <div>
+              <%= form.label :duration, "瞑想時間（分）", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+              <%= form.number_field :duration, class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors", min: 1 %>
+            </div>
+          </div>
 
-      <div>
-        <%= form.label :notes, "メモ", class: "block text-sm font-medium text-gray-700 mb-2" %>
-        <%= form.text_area :notes, rows: 4, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
-      </div>
+          <div>
+            <%= form.label :notes, "メモ（瞑想の感想や気づき）", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+            <%= form.text_area :notes, rows: 4, placeholder: "今日の瞑想で感じたこと、気づいたことを自由に記録してください...", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors" %>
+          </div>
 
-      <div>
-        <%= form.label :file_name, "音楽ファイル名", class: "block text-sm font-medium text-gray-700 mb-2" %>
-        <%= form.text_field :file_name, class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" %>
-      </div>
+          <div>
+            <%= form.label :file_name, "音楽ファイル名", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+            <%= form.text_field :file_name, placeholder: "使用した音楽ファイル名を入力してください", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors" %>
+          </div>
 
-      <div class="flex space-x-4">
-        <%= form.submit "更新", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-        <%= link_to "キャンセル", @meditation_record, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-        <%= link_to "記録一覧に戻る", list_meditation_records_path, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+          <div class="flex space-x-4 justify-center pt-6">
+            <%= form.submit "更新", class: "bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+            <%= link_to "キャンセル", @meditation_record, class: "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+            <%= link_to "記録一覧に戻る", list_meditation_records_path, class: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+          </div>
+        <% end %>
       </div>
-
-   <% end %>
+    </div>
   </div>
 </div> 

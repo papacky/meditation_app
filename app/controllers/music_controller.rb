@@ -7,6 +7,8 @@ class MusicController < ApplicationController
     @music_files = []
     if Dir.exist?(music_dir)
       @music_files = Dir.entries(music_dir).select { |f| f =~ /\.(mp3|wav|flac|m4a|aac|ogg)$/i }
+      # ファイル名先頭の2桁番号でソート
+      @music_files = @music_files.sort_by { |name| name[/\A(\d{2})_/, 1].to_i }
     end
   end
 
