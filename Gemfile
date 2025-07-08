@@ -69,11 +69,6 @@ end
 
 gem 'pg'
 
-gem 'omniauth', '~> 2.1.3'
-gem 'omniauth-google-oauth2', '~> 1.2.1'
-
-gem 'google-api-client', '~> 0.53.0'
-
 gem 'simple_calendar'
 
 gem 'devise'

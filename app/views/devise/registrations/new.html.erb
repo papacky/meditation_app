@@ -1,9 +1,18 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md w-full space-y-8">
     <div>
+      <!-- 瞑想をイメージするアイコン -->
+      <div class="mx-auto h-24 w-24 mb-6">
+        <svg class="h-full w-full text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+      </div>
       <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        新規アカウント作成
+        瞑想アプリに参加
       </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        アカウントを作成して瞑想を始めましょう
+      </p>
     </div>
     
     <%= form_with(model: resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }, html: { class: "mt-8 space-y-6" }) do |f| %>

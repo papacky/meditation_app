@@ -1,63 +1,104 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">音楽再生</h1>
-      <div class="flex space-x-4">
-        <% if user_signed_in? %>
-          <span class="text-sm text-gray-600">
-            ログイン中: <%= current_user.email %>
-          </span>
-          <%= link_to "ログアウト", destroy_user_session_path, 
-              class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
-              method: :delete %>
-        <% end %>
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100">
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+      <!-- ヘッダー部分 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <div class="h-12 w-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-3xl font-bold text-gray-900">瞑想セッション</h1>
+              <p class="text-gray-600">音楽を聴きながら心を落ち着かせましょう</p>
+            </div>
+          </div>
+          <div class="flex space-x-4">
+            <% if user_signed_in? %>
+              <span class="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-lg">
+                <%= current_user.email %>
+              </span>
+              <%= link_to "ログアウト", destroy_user_session_path, 
+                  class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors",
+                  method: :delete %>
+            <% end %>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="bg-white shadow rounded-lg p-6">
-      <div class="text-center mb-8">
-         
-        <div class="mb-6" style="margin-top: 2.5em;">
-          <audio id="audio-player" controls class="w-full max-w-md mx-auto" style="transform: scale(1.2);">
-            <source src="/music/<%= @file_name %>" type="audio/mpeg">
-            お使いのブラウザは音声再生に対応していません。
-          </audio>
+      <!-- 音楽再生部分 -->
+      <div class="bg-white shadow-lg rounded-lg p-8">
+        <!-- 音楽ファイル名表示 -->
+        <div class="text-center mb-8">
+          <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg p-4 mb-6">
+            <h2 class="text-xl font-semibold">
+              <%= @file_name.gsub(/\.(mp3|wav|flac|m4a|aac|ogg)$/i, '') %>
+            </h2>
+          </div>
+          
+          <!-- 音楽プレイヤー -->
+          <div class="bg-gradient-to-br from-gray-50 to-white rounded-xl p-8 shadow-lg">
+            <audio id="audio-player" controls class="w-full max-w-lg mx-auto transform scale-110">
+              <source src="/music/<%= @file_name %>" type="audio/mpeg">
+              お使いのブラウザは音声再生に対応していません。
+            </audio>
+          </div>
         </div>
-      </div>
-      
-      <% if user_signed_in? %>
-        <div class="bg-gray-50 rounded-lg p-6">
-          <h3 class="text-lg font-semibold text-gray-900 mb-4" style="font-family: inherit;">瞑想記録を保存</h3>
-          <%= form_with scope: :meditation_record, url: meditation_records_path, local: true, data: { turbo: false }, class: "space-y-4", html: { id: 'meditation-form' } do |form| %>
-            <div>
-              <%= form.label :date, "日付", class: "block text-base font-semibold text-gray-900 mb-1", style: "font-family: inherit;" %>
-              <%= form.date_field :date, value: Date.current, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base", style: "height: 2.5em; font-family: inherit; padding-left: 1em;" %>
+        
+        <% if user_signed_in? %>
+          <!-- 瞑想記録フォーム -->
+          <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-8 border border-blue-200">
+            <div class="flex items-center mb-6">
+              <div class="h-8 w-8 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
+                <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-900">瞑想記録を保存</h3>
             </div>
-            <div>
-              <%= form.label :duration, "瞑想時間（分）", class: "block text-base font-semibold text-gray-900 mb-1", style: "font-family: inherit;" %>
-              <%= form.number_field :duration, min: 1, step: 1, class: "mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base flex items-center", style: "height: 2.5em; font-family: inherit; width: 100px; display: inline-block; vertical-align: middle; padding-left: 1em; text-align: left;" %>
-            </div>
-            <div>
-              <%= form.label :notes, "メモ", class: "block text-base font-semibold text-gray-900 mb-1", style: "font-family: inherit;" %>
-              <%= form.text_area :notes, rows: 3, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base", style: "height: 6.75em; font-family: inherit; padding-left: 1em; padding-top: 1em; padding-bottom: 1em;" %>
-            </div>
-            <div class="flex space-x-4 mt-6 justify-start">
-              <%= form.submit "記録を保存", class: "w-32 min-w-fit bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-base", data: { disable_with: "保存中..." } %>
-              <%= link_to "音楽ライブラリに戻る", music_path, class: "w-32 min-w-fit bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded text-base text-center" %>
-            </div>
-          <% end %>
-        </div>
+            
+            <%= form_with scope: :meditation_record, url: meditation_records_path, local: true, data: { turbo: false }, class: "space-y-6", html: { id: 'meditation-form' } do |form| %>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <%= form.label :date, "日付", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+                  <%= form.date_field :date, value: Date.current, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4" %>
+                </div>
+                <div>
+                  <%= form.label :duration, "瞑想時間（分）", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+                  <%= form.number_field :duration, min: 1, step: 1, class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4" %>
+                </div>
+              </div>
+              <div>
+                <%= form.label :notes, "メモ（今日の瞑想の感想や気づき）", class: "block text-sm font-semibold text-gray-700 mb-2" %>
+                <%= form.text_area :notes, rows: 4, placeholder: "今日の瞑想で感じたこと、気づいたことを自由に記録してください...", class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4" %>
+              </div>
+              <div class="flex space-x-4 pt-4">
+                <%= form.submit "記録を保存", class: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105", data: { disable_with: "保存中..." } %>
+                <%= link_to "音楽ライブラリに戻る", music_path, class: "bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+              </div>
+            <% end %>
+          </div>
       <% else %>
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-          <p class="text-yellow-800 text-sm">
-            瞑想記録を保存するには、
-            <%= link_to "ログイン", new_user_session_path, 
-                class: "text-yellow-600 hover:text-yellow-800 underline" %>
-            または
-            <%= link_to "新規登録", new_user_registration_path, 
-                class: "text-yellow-600 hover:text-yellow-800 underline" %>
-            してください。
+        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-xl p-6">
+          <div class="flex items-center mb-4">
+            <div class="h-8 w-8 bg-yellow-500 rounded-lg flex items-center justify-center mr-3">
+              <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"/>
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-yellow-800">ログインが必要です</h3>
+          </div>
+          <p class="text-yellow-800 mb-4">
+            瞑想記録を保存するには、アカウントが必要です。
           </p>
+          <div class="flex space-x-4">
+            <%= link_to "ログイン", new_user_session_path, 
+                class: "bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg transition-colors" %>
+            <%= link_to "新規登録", new_user_registration_path, 
+                class: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition-colors" %>
+          </div>
         </div>
       <% end %>
     </div>

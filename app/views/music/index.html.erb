@@ -1,114 +1,116 @@
-<div class="container mx-auto px-4 py-8">
-  <div class="max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-bold text-gray-900">瞑想音楽ライブラリ</h1>
-      <div class="flex space-x-4">
-        <% if user_signed_in? %>
-          <span class="text-sm text-gray-600">
-            ログイン中: <%= current_user.email %>
-          </span>
-          <%= link_to "ログアウト", destroy_user_session_path, 
-              class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded",
-              method: :delete %>
-        <% else %>
-          <%= link_to "ログイン", new_user_session_path, 
-              class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2" %>
-          <%= link_to "新規登録", new_user_registration_path, 
-              class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
-        <% end %>
+<div class="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100">
+  <div class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
+      <!-- ヘッダー部分 -->
+      <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <div class="flex justify-between items-center">
+          <div class="flex items-center space-x-4">
+            <div class="h-12 w-12 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center">
+              <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+              </svg>
+            </div>
+            <div>
+              <h1 class="text-3xl font-bold text-gray-900">瞑想音楽ライブラリ</h1>
+              <p class="text-gray-600">心を落ち着かせる音楽で瞑想を始めましょう</p>
+            </div>
+          </div>
+          <div class="flex space-x-4">
+            <% if user_signed_in? %>
+              <span class="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-lg">
+                <%= current_user.email %>
+              </span>
+              <%= link_to "ログアウト", destroy_user_session_path, 
+                  class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors",
+                  method: :delete %>
+            <% else %>
+              <%= link_to "ログイン", new_user_session_path, 
+                  class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors mr-2" %>
+              <%= link_to "新規登録", new_user_registration_path, 
+                  class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg transition-colors" %>
+            <% end %>
+          </div>
+        </div>
       </div>
-    </div>
 
     <% if user_signed_in? %>
-      <div class="bg-white shadow rounded-lg p-6">
-        <h1 class="text-2xl font-semibold mb-4">音楽メニュー</h1>
+      <!-- ナビゲーションボタン -->
+      <div class="mb-6">
+        <%= link_to "瞑想記録を見る", meditation_records_path,
+            class: "bg-purple-500 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors inline-flex items-center" %>
+      </div>
+
+      <!-- 音楽ファイル一覧 -->
+      <div class="bg-white shadow-lg rounded-lg p-8">
+        <div class="flex items-center mb-6">
+          <div class="h-8 w-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center mr-3">
+            <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+            </svg>
+          </div>
+          <h2 class="text-2xl font-semibold text-gray-900">瞑想音楽を選択</h2>
+        </div>
         
         <% if @music_files.any? %>
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             <% @music_files.each do |file| %>
-              <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
-                <div class="mb-3">
-                  <h3 class="font-medium text-gray-900 truncate" title="<%= file %>">
-                    <%= file %>
+              <div class="bg-gradient-to-br from-white to-gray-50 border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:scale-105">
+                <div class="mb-4">
+                  <div class="h-12 w-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center mb-3">
+                    <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                  </div>
+                  <h3 class="font-medium text-gray-900 text-sm leading-tight" title="<%= file %>">
+                    <%= file.gsub(/\.(mp3|wav|flac|m4a|aac|ogg)$/i, '') %>
                   </h3>
                 </div>
-                <%= link_to "選択", music_play_path(file_name: file),
-                    class: "w-full bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-center block" %>
+                <%= link_to "瞑想を始める", music_play_path(file_name: file),
+                    class: "w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-4 rounded-lg text-center block transition-all duration-300 transform hover:scale-105" %>
               </div>
             <% end %>
           </div>
         <% else %>
-          <div class="text-center py-8">
+          <div class="text-center py-12">
             <div class="mb-6">
-              <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+              <svg class="mx-auto h-20 w-20 text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
               </svg>
             </div>
             <h2 class="text-2xl font-bold text-gray-900 mb-4">音楽ファイルが見つかりません</h2>
             <p class="text-gray-600 mb-6">
-              public/music フォルダに音楽ファイル（mp3等）を配置してください。
+              public/music フォルダに瞑想用の音楽ファイル（mp3等）を配置してください。
             </p>
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
+              <p class="text-sm text-blue-800">
+                <strong>推奨ファイル形式:</strong> MP3, WAV, FLAC, M4A, AAC, OGG
+              </p>
+            </div>
           </div>
         <% end %>
       </div>
     <% else %>
-      <div class="bg-white shadow rounded-lg p-8 text-center">
-        <div class="mb-6">
-          <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-          </svg>
+      <div class="bg-white shadow-lg rounded-lg p-12 text-center">
+        <div class="mb-8">
+          <div class="mx-auto h-24 w-24 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center mb-6">
+            <svg class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <h2 class="text-3xl font-bold text-gray-900 mb-4">瞑想を始めましょう</h2>
+          <p class="text-gray-600 mb-8 text-lg">
+            心を落ち着かせる瞑想音楽ライブラリにアクセスするには、アカウントが必要です。
+          </p>
         </div>
-        <h2 class="text-2xl font-bold text-gray-900 mb-4">ログインまたは新規登録してください</h2>
-        <p class="text-gray-600 mb-6">
-          瞑想音楽ライブラリにアクセスするには、アカウントが必要です。
-        </p>
         <div class="space-y-4">
           <%= link_to "ログイン", new_user_session_path, 
-              class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg mr-4" %>
+              class: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-lg text-lg mr-4 transition-all duration-300 transform hover:scale-105" %>
           <%= link_to "新規登録", new_user_registration_path, 
-              class: "bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-lg" %>
+              class: "bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105" %>
         </div>
-      </div>
-    <% end %>
-
-    <% if user_signed_in? %>
-      <div class="mt-8">
-        <%= link_to "瞑想記録を見る", meditation_records_path,
-            class: "bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded" %>
       </div>
     <% end %>
   </div>
 </div>
 
-<% if session[:google_access_token] %>
-<script>
-document.addEventListener('turbo:load', function() {
-  // 本番環境用のトークンリフレッシュ処理
-  function performTokenRefresh() {
-    fetch('/refresh_google_token', {
-      method: 'POST',
-      headers: {
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (!data.success) {
-        // 失敗時は再ログインページに移動
-        window.location.href = '/auth/google_oauth2';
-      }
-    })
-    .catch(error => {
-      // エラー時も再ログインページに移動
-      window.location.href = '/auth/google_oauth2';
-    });
-  }
-  
-  // ページ読み込み後55分でトークンリフレッシュ
-  setTimeout(function() {
-    performTokenRefresh();
-  }, 55 * 60 * 1000); // 55分後
-});
-</script>
-<% end %> 
+ 
