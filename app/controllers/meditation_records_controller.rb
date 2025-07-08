@@ -73,9 +73,9 @@ class MeditationRecordsController < ApplicationController
   def destroy
     if @meditation_record.user == current_user
       @meditation_record.destroy
-      redirect_to meditation_records_url, notice: '瞑想記録が削除されました。'
+      redirect_to list_meditation_records_path, notice: '瞑想記録が削除されました。'
     else
-      redirect_to meditation_records_url, alert: '削除権限がありません。'
+      redirect_to list_meditation_records_path, alert: '削除権限がありません。'
     end
   end
 
