@@ -36,6 +36,11 @@ class MeditationRecordsController < ApplicationController
     # 記録一覧ページ用のアクション
     @meditation_records = MeditationRecord.where(user: current_user)
                                          .order(date: :desc, created_at: :desc)
+    
+    # デバッグ用ログ
+    Rails.logger.info "User: #{current_user.id}, Records count: #{@meditation_records.count}"
+    Rails.logger.info "All records count: #{MeditationRecord.count}"
+    Rails.logger.info "Records with user_id: #{MeditationRecord.where(user_id: current_user.id).count}"
   end
 
   def show

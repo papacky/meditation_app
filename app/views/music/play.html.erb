@@ -137,29 +137,30 @@ document.addEventListener('turbo:load', function() {
     const audio = document.getElementById('audio-player');
     const durationInputField = document.querySelector('input[name="meditation_record[duration]"]');
 
-  // 音楽ファイルの再生時間（分）を自動でdurationにセット
-  if (audio && durationInputField) {
-    function setDurationFromAudio() {
-      if (audio.duration && !isNaN(audio.duration)) {
-        const minutes = Math.max(1, Math.round(audio.duration / 60));
-        durationInputField.value = minutes;
+    // 音楽ファイルの再生時間（分）を自動でdurationにセット
+    if (audio && durationInputField) {
+      function setDurationFromAudio() {
+        if (audio.duration && !isNaN(audio.duration)) {
+          const minutes = Math.max(1, Math.round(audio.duration / 60));
+          durationInputField.value = minutes;
+        }
       }
+      audio.addEventListener('loadedmetadata', setDurationFromAudio);
+      audio.addEventListener('play', setDurationFromAudio);
     }
-    audio.addEventListener('loadedmetadata', setDurationFromAudio);
-    audio.addEventListener('play', setDurationFromAudio);
-  }
 
-  // フォーム送信時の処理（Railsの標準的なリダイレクトに任せる）
-  const form = document.getElementById('meditation-form');
-  if (form) {
-    form.addEventListener('submit', function(event) {
-      // 送信ボタンを無効化して重複送信を防ぐ
-      const submitBtn = form.querySelector('input[type="submit"]');
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.value = '保存中...';
-      }
-    });
+    // フォーム送信時の処理（Railsの標準的なリダイレクトに任せる）
+    const form = document.getElementById('meditation-form');
+    if (form) {
+      form.addEventListener('submit', function(event) {
+        // 送信ボタンを無効化して重複送信を防ぐ
+        const submitBtn = form.querySelector('input[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.value = '保存中...';
+        }
+      });
+    }
   } catch (error) {
     console.error('JavaScript error:', error);
   }
