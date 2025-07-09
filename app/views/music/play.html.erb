@@ -192,13 +192,12 @@ document.addEventListener('turbo:load', function() {
   }
 
   // 音楽ファイルの再生時間（分）を自動でdurationにセット
-  const audio = document.getElementById('audio-player');
-  const durationInput = document.querySelector('input[name="meditation_record[duration]"]');
-  if (audio && durationInput) {
+  const durationInputField = document.querySelector('input[name="meditation_record[duration]"]');
+  if (audio && durationInputField) {
     function setDurationFromAudio() {
       if (audio.duration && !isNaN(audio.duration)) {
         const minutes = Math.max(1, Math.round(audio.duration / 60));
-        durationInput.value = minutes;
+        durationInputField.value = minutes;
       }
     }
     audio.addEventListener('loadedmetadata', setDurationFromAudio);
@@ -208,14 +207,11 @@ document.addEventListener('turbo:load', function() {
   // 記録を保存したら記録一覧に遷移
   const form = document.getElementById('meditation-form');
   if (form) {
-    form.addEventListener('ajax:success', function(event) {
-      window.location.href = '/meditation_records';
-    });
     form.addEventListener('submit', function(event) {
-      // 送信後に必ず遷移（非同期・同期両対応）
+      // フォーム送信後に記録一覧ページに遷移
       setTimeout(function() {
         window.location.href = '/meditation_records';
-      }, 100);
+      }, 500);
     });
   }
 });
