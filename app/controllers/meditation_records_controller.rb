@@ -56,8 +56,13 @@ class MeditationRecordsController < ApplicationController
     if @meditation_record.save
       redirect_to list_meditation_records_path, notice: '瞑想記録が作成されました。'
     else
-      @file_id = params[:meditation_record][:file_id] if params[:meditation_record]
-      @file_name = params[:meditation_record][:file_name] if params[:meditation_record]
+      # エラー時の変数設定を確実に行う
+      @file_name = params[:meditation_record][:file_name] if params[:meditation_record] && params[:meditation_record][:file_name]
+      @file_id = params[:meditation_record][:file_id] if params[:meditation_record] && params[:meditation_record][:file_id]
+      
+      # エラーメッセージをログに出力
+      Rails.logger.error "Meditation record creation failed: #{@meditation_record.errors.full_messages}"
+      
       render 'music/play', status: :unprocessable_entity
     end
   end
