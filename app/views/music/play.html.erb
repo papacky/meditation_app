@@ -110,89 +110,10 @@
 
 <script>
 document.addEventListener('turbo:load', function() {
-  let startTime = null;
-  let elapsedTime = 0;
-  let timerInterval = null;
-  let isRunning = false;
-  
-  const timerDisplay = document.getElementById('timer');
-  const startBtn = document.getElementById('startBtn');
-  const pauseBtn = document.getElementById('pauseBtn');
-  const stopBtn = document.getElementById('stopBtn');
-  const durationInput = document.getElementById('meditation-duration');
   const audio = document.getElementById('audio-player');
-  
-  function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  }
-  
-  function updateTimer() {
-    if (isRunning) {
-      const currentTime = Date.now();
-      elapsedTime = Math.floor((currentTime - startTime) / 1000);
-      timerDisplay.textContent = formatTime(elapsedTime);
-      
-      // 瞑想時間入力欄を更新（分単位）
-      const minutes = Math.floor(elapsedTime / 60);
-      if (durationInput) {
-        durationInput.value = minutes;
-      }
-    }
-  }
-  
-  startBtn.addEventListener('click', function() {
-    if (!isRunning) {
-      startTime = Date.now() - (elapsedTime * 1000);
-      isRunning = true;
-      timerInterval = setInterval(updateTimer, 1000);
-      
-      startBtn.disabled = true;
-      pauseBtn.disabled = false;
-      stopBtn.disabled = false;
-    }
-  });
-  
-  pauseBtn.addEventListener('click', function() {
-    if (isRunning) {
-      isRunning = false;
-      clearInterval(timerInterval);
-      
-      startBtn.disabled = false;
-      pauseBtn.disabled = true;
-      stopBtn.disabled = false;
-    }
-  });
-  
-  stopBtn.addEventListener('click', function() {
-    isRunning = false;
-    clearInterval(timerInterval);
-    elapsedTime = 0;
-    timerDisplay.textContent = '00:00';
-    
-    if (durationInput) {
-      durationInput.value = 0;
-    }
-    
-    startBtn.disabled = false;
-    pauseBtn.disabled = true;
-    stopBtn.disabled = true;
-  });
-
-  // 音楽再生時間を瞑想時間に自動反映
-  if (audio && durationInput) {
-    audio.addEventListener('timeupdate', function() {
-      // 再生位置（秒）を分単位で切り上げ
-      const minutes = Math.ceil(audio.currentTime / 60);
-      if (!isRunning) { // タイマーが動いていない場合のみ更新
-        durationInput.value = minutes;
-      }
-    });
-  }
+  const durationInputField = document.querySelector('input[name="meditation_record[duration]"]');
 
   // 音楽ファイルの再生時間（分）を自動でdurationにセット
-  const durationInputField = document.querySelector('input[name="meditation_record[duration]"]');
   if (audio && durationInputField) {
     function setDurationFromAudio() {
       if (audio.duration && !isNaN(audio.duration)) {
