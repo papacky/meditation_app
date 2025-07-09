@@ -14,7 +14,7 @@ class MeditationRecordsController < ApplicationController
     end_date = current_date.end_of_month
 
     # 表示中の月の瞑想記録を日付ごとに取得
-    @meditation_records = MeditationRecord.where(user: current_user, date: start_date..end_date)
+    @meditation_records = MeditationRecord.where(user_id: current_user.id, date: start_date..end_date)
 
     # 日付ごとの実施回数（カレンダー用）
     @records_by_date = @meditation_records.group(:date).count
@@ -26,7 +26,7 @@ class MeditationRecordsController < ApplicationController
     @current_month_name = current_date.strftime("%Y年%-m月")
 
     # 全期間の累計
-    all_records = MeditationRecord.where(user: current_user)
+    all_records = MeditationRecord.where(user_id: current_user.id)
     @total_sessions = all_records.count
     @total_duration = all_records.sum(:duration)
     @total_days = all_records.select(:date).distinct.count
@@ -34,7 +34,7 @@ class MeditationRecordsController < ApplicationController
 
   def list
     # 記録一覧ページ用のアクション
-    @meditation_records = MeditationRecord.where(user: current_user)
+    @meditation_records = MeditationRecord.where(user_id: current_user.id)
                                          .order(date: :desc, created_at: :desc)
     
     # デバッグ用ログ
