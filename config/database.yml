@@ -8,13 +8,13 @@ default: &default
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  username: ytpacky
-  password: 4928094
-  host: localhost
 
 development:
   <<: *default
   database: meditation_app_development
+  username: ytpacky
+  password: 4928094
+  host: localhost
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -22,7 +22,10 @@ development:
 test:
   <<: *default
   database: meditation_app_test
+  username: ytpacky
+  password: 4928094
+  host: localhost
 
 production:
   <<: *default
-  database: meditation_app_production
+  url: <%= ENV['DATABASE_URL'] %>
