@@ -75,4 +75,7 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   config.hosts.clear
+
+  # HTTPS設定
+  config.force_ssl = false  # 開発環境ではfalseに設定
 end

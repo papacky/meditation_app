@@ -31,8 +31,21 @@ end
 # terminating a worker in development environments.
 worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT") { 3000 }
+# Development環境でHTTPSを有効にする
+if rails_env == "development"
+  # HTTPポート（3000）
+  port ENV.fetch("PORT") { 3000 }
+  
+  # HTTPSポート（3001）
+  ssl_bind '0.0.0.0', '3001', {
+    key: 'config/ssl/localhost.key',
+    cert: 'config/ssl/localhost.crt',
+    verify_mode: 'none'
+  }
+else
+  # Production環境では通常のポート設定
+  port ENV.fetch("PORT") { 3000 }
+end
 
 # Specifies the `environment` that Puma will run in.
 environment rails_env
