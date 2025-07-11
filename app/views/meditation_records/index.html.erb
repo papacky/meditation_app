@@ -17,7 +17,7 @@
           </div>
           <div class="flex space-x-4">
             <%= link_to "音楽ライブラリ", music_path,
-                class: "bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+                class: "mobile-button bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-6 flex items-center justify-center rounded-lg transition-all duration-300 transform hover:scale-105" %>
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2 2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                   </svg>
                 </div>
-                <h2 class="text-3xl font-bold text-gray-900">
+                <h2 class="text-2xl font-bold text-gray-900">
                   <%= current_month.strftime("%Y年%-m月") %>
                 </h2>
               </div>
@@ -49,8 +49,7 @@
                     <span class="font-semibold text-gray-700"><%= date.day %></span>
                     <% if records.present? %>
                       <div class="mt-1">
-                        <span class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-full
-                          text-base md:text-lg px-1 py-0.5 md:px-2 md:py-1 truncate">
+                        <span class="badge-blue badge-count bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold rounded-full text-base md:text-lg px-1 py-0.5 md:px-2 md:py-1 truncate">
                           <%= records.count %>回
                         </span>
                       </div>
