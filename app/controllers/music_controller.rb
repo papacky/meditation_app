@@ -21,8 +21,14 @@ class MusicController < ApplicationController
   end
 
   def play
-    @file_name = params[:file_name]
-    # ローカルファイル名をそのまま渡すだけ
+    # params[:file_name]がActionController::ParametersやHashの場合も考慮し、必ずString型でセット
+    if params[:file_name].is_a?(ActionController::Parameters)
+      @file_name = params[:file_name][:name].to_s
+    elsif params[:file_name].is_a?(Hash)
+      @file_name = params[:file_name]['name'].to_s
+    else
+      @file_name = params[:file_name].to_s
+    end
   end
 
   # Google Driveストリーミングは不要になったのでstreamアクションは未使用

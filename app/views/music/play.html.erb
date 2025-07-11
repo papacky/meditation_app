@@ -1,9 +1,22 @@
+<style>
+  @media (max-width: 639px) {
+    .force-mobile-col {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: stretch !important;
+    }
+    .force-mobile-col > .force-mobile-col-child {
+      margin-top: 1rem !important;
+      margin-bottom: 0 !important;
+    }
+  }
+</style>
 <div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-100">
   <div class="container mx-auto px-4 py-8">
     <div class="max-w-4xl mx-auto">
       <!-- ヘッダー部分 -->
       <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center force-mobile-col">
           <div class="flex items-center space-x-4">
             <div class="h-12 w-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
               <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,7 +28,7 @@
               <p class="text-gray-600">音楽を聴きながら心を落ち着かせましょう</p>
             </div>
           </div>
-          <div class="flex space-x-4">
+          <div class="flex space-x-4 force-mobile-col-child">
             <% if user_signed_in? %>
               <span class="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-lg">
                 <%= current_user.email %>
@@ -100,9 +113,9 @@
                 <%= form.label :notes, "メモ（今日の瞑想の感想や気づき）", class: "block text-sm font-semibold text-gray-700 mb-2" %>
                 <%= form.text_area :notes, rows: 4, placeholder: "今日の瞑想で感じたこと、気づいたことを自由に記録してください...", class: "w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-base py-3 px-4" %>
               </div>
-              <div class="flex space-x-4 pt-4">
-                <%= form.submit "記録を保存", class: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105", data: { disable_with: "保存中..." } %>
-                <%= link_to "音楽ライブラリに戻る", music_path, class: "bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+              <div class="flex flex-col space-y-4 pt-4 sm:flex-row sm:space-y-0 sm:space-x-4 items-center sm:items-stretch w-full">
+                <%= form.submit "記録を保存", class: "w-10/12 sm:w-auto text-center bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105", data: { disable_with: "保存中..." } %>
+                <%= link_to "音楽ライブラリに戻る", music_path, class: "w-10/12 sm:w-auto text-center bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105" %>
               </div>
             <% end %>
           </div>
