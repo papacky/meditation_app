@@ -58,10 +58,10 @@
             <%= form.text_field :file_name, placeholder: "使用した音楽ファイル名を入力してください", class: "w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors" %>
           </div>
 
-          <div class="flex space-x-4 justify-center pt-6">
-            <%= form.submit "更新", class: "bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 edit-form-action" %>
-            <%= link_to "キャンセル", @meditation_record, class: "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 edit-form-action" %>
-            <%= link_to "記録一覧に戻る", list_meditation_records_path, class: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 edit-form-action" %>
+          <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center pt-6 items-center">
+            <%= form.submit "更新", class: "inline-block text-center w-[170px] bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 edit-form-action" %>
+            <%= link_to "キャンセル", @meditation_record, class: "inline-block text-center w-[170px] bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 edit-form-action" %>
+            <%= link_to "記録一覧に戻る", list_meditation_records_path, class: "inline-block text-center w-[170px] bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 edit-form-action" %>
           </div>
         <% end %>
       </div>
