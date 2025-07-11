@@ -3,7 +3,8 @@
     <div class="max-w-6xl mx-auto">
       <!-- ヘッダー部分 -->
       <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <div class="flex justify-between items-center">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+          <!-- 1段目：タイトル＋説明 -->
           <div class="flex items-center space-x-4">
             <div class="h-12 w-12 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center">
               <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,13 +16,14 @@
               <p class="text-gray-600">心を落ち着かせる音楽で瞑想を始めましょう</p>
             </div>
           </div>
-          <div class="flex flex-col md:flex-row items-center md:items-stretch space-y-2 md:space-y-0 md:space-x-4">
+          <!-- 2段目：メールアドレス＋ログアウト -->
+          <div class="flex flex-col mt-4 space-y-2 sm:mt-0">
             <% if user_signed_in? %>
-              <span class="text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-lg flex items-center h-10">
+              <span class="block w-fit text-sm text-gray-600 bg-gray-100 px-3 py-2 rounded-lg h-10">
                 <%= current_user.email %>
               </span>
               <%= link_to "ログアウト", destroy_user_session_path, 
-                  class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg h-10 flex items-center justify-center transition-colors",
+                  class: "w-[140px] sm:w-auto bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg h-10 flex items-center justify-center transition-colors",
                   method: :delete %>
             <% else %>
               <%= link_to "ログイン", new_user_session_path, 
