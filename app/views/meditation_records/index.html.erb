@@ -1,23 +1,49 @@
+<style>
+@media (max-width: 768px) {
+  .header-flex-responsive {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+  }
+  .header-title-row {
+    margin-bottom: 1rem !important;
+  }
+  .header-music-btn {
+    justify-content: flex-start !important;
+    margin-left: 0 !important;
+  }
+  .mobile-button {
+    width: 130px !important;   /* お好みのpx値に調整可能 */
+    max-width: 100%;
+    margin-left: 0 !important;
+    justify-content: center !important;
+    display: flex !important;
+  }
+}
+</style>
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
   <div class="container mx-auto px-4 py-8">
     <div class="max-w-7xl mx-auto">
       <!-- ヘッダー部分 -->
       <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-4">
+        <div class="flex justify-between items-center header-flex-responsive">
+          <div class="flex items-center space-x-4 header-title-row">
+            <!-- アイコン -->
             <div class="h-12 w-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
               <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
               </svg>
             </div>
+            <!-- タイトルと説明 -->
             <div>
               <h1 class="text-3xl font-bold text-gray-900">瞑想記録</h1>
               <p class="text-gray-600">あなたの瞑想の歩みを振り返りましょう</p>
             </div>
           </div>
-          <div class="flex space-x-4">
+          <!-- 音楽ライブラリボタン -->
+          <div class="flex space-x-4 header-music-btn">
             <%= link_to "音楽ライブラリ", music_path,
-                class: "mobile-button bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-6 flex items-center justify-center rounded-lg transition-all duration-300 transform hover:scale-105 ml-6" %>
+                class: "mobile-button bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-6 flex items-center justify-center rounded-lg transition-all duration-300 transform hover:scale-105" %>
           </div>
         </div>
       </div>
