@@ -1,51 +1,42 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
-    <div>
-      <!-- 瞑想をイメージするアイコン -->
-      <div class="mx-auto h-24 w-24 mb-6">
-        <svg class="h-full w-full text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
-        </svg>
-      </div>
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-        瞑想アプリへようこそ
-      </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
+
+<!-- --- カラー版イラスト案のみ --- -->
+<div class="max-w-md w-full space-y-8 mt-16 mx-auto bg-gray-100">
+  <div class="flex flex-col items-center">
+    <!-- 柔らかいイメージのバージョンのみ表示 -->
+    <img src="https://imgcdn.stablediffusionweb.com/2025/7/12/95ba7697-df8e-40eb-b495-b6307c4d9b44.jpg" alt="お釈迦さまが座禅し花に囲まれているイラスト（柔らかいイメージ）" class="w-full max-w-[400px] h-auto object-cover rounded-xl shadow mb-4" style="filter: brightness(1.1) saturate(0.7) blur(0.5px);">
+    <h1 class="text-center text-2xl font-bold text-gray-900 mb-2">瞑想アプリへようこそ</h1>
+    <p class="mt-2 text-center text-sm text-gray-600">
         ログインして瞑想を始めましょう
-      </p>
-    </div>
-    
-    <%= form_with(model: resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }, html: { class: "mt-8 space-y-6" }) do |f| %>
-      <div class="rounded-md shadow-sm -space-y-px">
+    </p>
+  </div>
+  <div class="bg-gray-100 rounded-2xl shadow p-8 mt-4">
+    <%= form_with(model: resource, as: resource_name, url: session_path(resource_name), data: { turbo: false }, html: { class: "space-y-6" }) do |f| %>
+      <div class="rounded-xl shadow-sm -space-y-px">
         <div>
           <%= f.label :email, "メールアドレス", class: "sr-only" %>
           <%= f.email_field :email, autofocus: true, autocomplete: "email",
-              class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
+              class: "appearance-none rounded-t-xl relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-blue-200 focus:border-blue-300 focus:z-10 sm:text-base bg-white",
               placeholder: "メールアドレス" %>
         </div>
-        
         <div>
           <%= f.label :password, "パスワード", class: "sr-only" %>
           <%= f.password_field :password, autocomplete: "current-password",
-              class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm",
+              class: "appearance-none rounded-b-xl relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-blue-200 focus:border-blue-300 focus:z-10 sm:text-base bg-white",
               placeholder: "パスワード" %>
         </div>
       </div>
-
       <% if devise_mapping.rememberable? %>
         <div class="flex items-center">
-          <%= f.check_box :remember_me, class: "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" %>
+          <%= f.check_box :remember_me, class: "h-4 w-4 text-pink-400 focus:ring-pink-400 border-pink-200 rounded" %>
           <%= f.label :remember_me, "ログイン状態を保持する", class: "ml-2 block text-sm text-gray-900" %>
         </div>
       <% end %>
-
       <div>
         <%= f.submit "ログイン",
-            class: "group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+            class: "group relative w-full flex justify-center py-3 px-4 border border-blue-200 text-base font-bold rounded-xl text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-200 shadow-md transition-all duration-300" %>
       </div>
     <% end %>
-
-    <div class="text-center">
+    <div class="text-center mt-2">
       <%= render "devise/shared/links" %>
     </div>
   </div>
