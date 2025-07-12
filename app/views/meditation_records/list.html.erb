@@ -3,8 +3,8 @@
     <div class="max-w-7xl mx-auto">
       <!-- ヘッダー部分 -->
       <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
-        <div class="flex justify-between items-center">
-          <div class="flex items-center space-x-4">
+        <div class="flex justify-between items-center header-list-responsive">
+          <div class="flex items-center space-x-4 header-list-title-row">
             <div class="h-12 w-12 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg flex items-center justify-center">
               <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
@@ -15,11 +15,11 @@
               <p class="text-gray-600">あなたの瞑想の記録とメモを確認できます</p>
             </div>
           </div>
-          <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+          <div class="flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 header-list-btns">
             <%= link_to "瞑想記録に戻る", meditation_records_path,
-                class: "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-2 rounded-lg transition-all duration-300 transform hover:scale-105 text-sm ml-4" %>
+                class: "list-mobile-btn bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 text-sm" %>
             <%= link_to "音楽ライブラリ", music_path,
-                class: "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-2 rounded-lg transition-all duration-300 transform hover:scale-105 text-sm ml-4" %>
+                class: "list-mobile-btn bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 text-sm" %>
           </div>
         </div>
       </div>
@@ -118,4 +118,47 @@ window.addEventListener('click', function(e) {
     });
   }
 });
-</script> 
+</script>
+
+<style>
+@media (max-width: 768px) {
+  .header-list-responsive {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0 !important;
+  }
+  .header-list-title-row {
+    margin-bottom: 1rem !important;
+  }
+  .header-list-btns {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    margin-left: 0 !important;
+    margin-top: 0 !important;
+    width: 100% !important;
+  }
+  .list-mobile-btn {
+    width: 140px !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 2px !important;
+    justify-content: center !important;
+    display: flex !important;
+    text-align: center !important;
+    font-size: 1rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .list-mobile-btn:last-child {
+    margin-bottom: 0 !important;
+  }
+}
+</style>
+<style>
+.header-list-btns .list-mobile-btn {
+  margin-bottom: 2px !important;
+}
+.header-list-btns .list-mobile-btn:last-child {
+  margin-bottom: 0 !important;
+}
+</style> 
