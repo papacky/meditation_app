@@ -4,7 +4,7 @@
       <!-- 詳細部分 -->
       <div class="max-w-2xl mx-auto">
         <!-- ヘッダー部分 -->
-        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+        <div class="bg-white rounded-lg shadow-lg p-5 mb-8">
           <div class="flex items-center space-x-4">
             <div class="h-12 w-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
               <svg class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -83,15 +83,15 @@
 
           <div class="mt-8 flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4 justify-center items-center">
             <%= link_to "一覧に戻る", meditation_records_path, 
-                class: "inline-block text-center min-w-[110px] bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+                class: "inline-block text-center w-[150px] bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-3 px-5 rounded-lg transition-all duration-300 transform hover:scale-105" %>
             <%= link_to "編集", edit_meditation_record_path(@meditation_record), 
-                class: "inline-block text-center min-w-[110px] bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+                class: "inline-block text-center w-[150px] bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700 text-white font-bold py-3 px-5 rounded-lg transition-all duration-300 transform hover:scale-105" %>
             <%= link_to "削除", meditation_record_path(@meditation_record), 
                 data: { 
                   turbo_method: :delete, 
                   turbo_confirm: "本当に削除しますか？" 
                 }, 
-                class: "inline-block text-center min-w-[110px] bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105" %>
+                class: "inline-block text-center w-[150px] bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white font-bold py-3 px-5 rounded-lg transition-all duration-300 transform hover:scale-105" %>
           </div>
         </div>
       </div>
