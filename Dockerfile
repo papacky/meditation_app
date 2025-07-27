@@ -38,9 +38,6 @@ RUN mkdir -p public/assets && chmod -R 755 public
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompile assets during build with dummy key
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
 # Final stage for app image
 FROM base AS final
 

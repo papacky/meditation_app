@@ -9,6 +9,14 @@ if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   echo "Running database migrations..."
   ./bin/rails db:migrate 2>/dev/null || true
   
+  # Precompile assets if they don't exist
+  if [ ! -f "public/assets/manifest.json" ]; then
+    echo "Precompiling assets..."
+    ./bin/rails assets:precompile
+  else
+    echo "Assets already precompiled"
+  fi
+  
   echo "Rails application ready"
 fi
 
