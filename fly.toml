@@ -1,0 +1,67 @@
+# fly.toml app configuration file generated for meditation-app on 2024-12-19T10:00:00Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+
+app = "meditation-app"
+primary_region = "nrt"
+
+[build]
+
+[env]
+  PORT = "8080"
+  RAILS_ENV = "production"
+  RAILS_SERVE_STATIC_FILES = "true"
+  RAILS_LOG_TO_STDOUT = "true"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 1024
+
+[mounts]
+  source = "meditation_app_data"
+  destination = "/rails/storage"
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "1s"
+    restart_limit = 0
+
+# PostgreSQLアドオンは別途設定が必要
+# fly postgres create --name meditation-app-db --region nrt
+# fly postgres attach meditation-app-db --app meditation-app 

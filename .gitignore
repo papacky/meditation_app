@@ -35,3 +35,6 @@
 /config/master.key
 
 *.Zone.Identifier
+
+# Fly.io
+.fly/
