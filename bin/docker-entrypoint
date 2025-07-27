@@ -3,20 +3,23 @@ set -e
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+  echo "Starting Rails application setup..."
+  
   # Ensure directory permissions first
   mkdir -p public/assets
   chmod -R 755 public
   
-  # Run database preparation in background to speed up startup
-  ./bin/rails db:prepare &
+  # Database setup - simplified for faster startup
+  echo "Setting up database..."
+  ./bin/rails db:migrate 2>/dev/null || ./bin/rails db:prepare
   
   # Precompile assets if they don't exist
   if [ ! -d "public/assets" ] || [ -z "$(ls -A public/assets 2>/dev/null)" ]; then
+    echo "Precompiling assets..."
     ./bin/rails assets:precompile
   fi
   
-  # Wait for database preparation to complete
-  wait
+  echo "Rails application setup complete"
 fi
 
 exec "${@}"

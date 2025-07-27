@@ -49,7 +49,7 @@ primary_region = "nrt"
     restart_limit = 0
 
   [[services.http_checks]]
-    grace_period = "120s"
+    grace_period = "90s"
     interval = "30s"
     method = "GET"
     timeout = "15s"
