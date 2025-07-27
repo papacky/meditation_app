@@ -7,6 +7,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   get "health" => "rails/health#show"
 
+  # ヘルスチェック用のルート
+  get '/health', to: proc { [200, {}, ['OK']] }
 
 
   # 音楽ファイル管理

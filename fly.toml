@@ -12,6 +12,9 @@ primary_region = "nrt"
   RAILS_ENV = "production"
   RAILS_SERVE_STATIC_FILES = "true"
   RAILS_LOG_TO_STDOUT = "true"
+  WEB_CONCURRENCY = "1"
+  RAILS_MAX_THREADS = "5"
+  RAILS_MIN_THREADS = "5"
 
 [[vm]]
   cpu_kind = "shared"
@@ -48,8 +51,8 @@ primary_region = "nrt"
     restart_limit = 0
 
   [[services.http_checks]]
-    grace_period = "30s"
+    grace_period = "60s"
     interval = "30s"
     method = "GET"
-    timeout = "10s"
+    timeout = "15s"
     path = "/health" 

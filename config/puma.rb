@@ -7,39 +7,59 @@
 # Any libraries that use thread pools should be configured to match
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum; this matches the default thread size of Active Record.
+#
 max_threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
 min_threads_count = ENV.fetch("RAILS_MIN_THREADS") { max_threads_count }
 threads min_threads_count, max_threads_count
 
-rails_env = ENV.fetch("RAILS_ENV") { "development" }
-
-if rails_env == "production"
-  # If you are running more than 1 thread per process, the workers count
-  # should be equal to the number of processors (CPU cores) in production.
-  #
-  # It defaults to 1 because it's impossible to reliably detect how many
-  # CPU cores are available. Make sure to set the `WEB_CONCURRENCY` environment
-  # variable to match the number of processors.
-  worker_count = Integer(ENV.fetch("WEB_CONCURRENCY") { 1 })
-  if worker_count > 1
-    workers worker_count
-  else
-    preload_app!
-  end
-end
-
 # Specifies the `worker_timeout` threshold that Puma will use to wait before
 # terminating a worker in development environments.
+#
 worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
-# Use the `port` that is specified by the `PORT` environment variable
-port ENV.fetch("PORT") { 3000 }
+# Specifies the `port` that Puma will listen on to determine if the environment is development, and also listens on the `$PORT` environment variable otherwise.
+# Default is port 3000.
+#
+if ENV["RAILS_ENV"] == "development"
+  port ENV.fetch("PORT") { 3000 }
+else
+  port ENV.fetch("PORT") { 8080 }
+end
 
 # Specifies the `environment` that Puma will run in.
-environment rails_env
+#
+environment ENV.fetch("RAILS_ENV") { "development" }
 
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
+# Specifies the number of `workers` to boot in clustered mode.
+# Workers are forked web server processes. If using threads and workers together
+# the concurrency of the application would be max `threads` * `workers`.
+# Workers do not work on JRuby or Windows (both of which do not support
+# processes).
+#
+# workers ENV.fetch("WEB_CONCURRENCY") { 2 }
+
+# Use the `preload_app!` method when specifying a `workers` number.
+# This directive tells Puma to first boot the application and load code
+# before forking the application. This takes advantage of Copy On Write
+# process behavior so workers use less memory.
+#
+# preload_app!
+
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
+
+# 起動時間を短縮するための設定
+preload_app!
+workers ENV.fetch("WEB_CONCURRENCY") { 1 }
+
+# ヘルスチェック用の設定
+before_fork do
+  ActiveRecord::Base.connection_pool.disconnect! if defined?(ActiveRecord)
+end
+
+on_worker_boot do
+  ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
+end
