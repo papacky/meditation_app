@@ -14,21 +14,6 @@ primary_region = "nrt"
   RAILS_LOG_TO_STDOUT = "true"
   RAILS_MASTER_KEY = "918b0e9b8224d6e86f66e4f3adb67f67"
 
-[http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ["app"]
-
-  [[http_service.checks]]
-    grace_period = "10s"
-    interval = "30s"
-    method = "GET"
-    timeout = "5s"
-    path = "/health"
-
 [[vm]]
   cpu_kind = "shared"
   cpus = 1
@@ -62,6 +47,13 @@ primary_region = "nrt"
     timeout = "2s"
     grace_period = "1s"
     restart_limit = 0
+
+  [[services.http_checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/health"
 
 # PostgreSQLアドオンは別途設定が必要
 # fly postgres create --name meditation-app-db --region nrt
