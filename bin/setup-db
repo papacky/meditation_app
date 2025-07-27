@@ -1,0 +1,15 @@
+#!/bin/bash
+set -e
+
+echo "Setting up database..."
+
+# Create database if it doesn't exist
+./bin/rails db:create 2>/dev/null || true
+
+# Run migrations
+./bin/rails db:migrate
+
+# Seed data if needed
+./bin/rails db:seed 2>/dev/null || true
+
+echo "Database setup complete" 
