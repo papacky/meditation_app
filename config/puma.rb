@@ -27,25 +27,13 @@ if rails_env == "production"
     preload_app!
   end
 end
+
 # Specifies the `worker_timeout` threshold that Puma will use to wait before
 # terminating a worker in development environments.
 worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
 
-# Development環境でHTTPSを有効にする
-if rails_env == "development"
-  # HTTPポート（3000）
-  port ENV.fetch("PORT") { 3000 }
-  
-  # HTTPSポート（3001）
-  ssl_bind '0.0.0.0', '3001', {
-    key: 'config/ssl/localhost.key',
-    cert: 'config/ssl/localhost.crt',
-    verify_mode: 'none'
-  }
-else
-  # Production環境では通常のポート設定
-  port ENV.fetch("PORT") { 3000 }
-end
+# Use the `port` that is specified by the `PORT` environment variable
+port ENV.fetch("PORT") { 3000 }
 
 # Specifies the `environment` that Puma will run in.
 environment rails_env

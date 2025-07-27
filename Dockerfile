@@ -13,7 +13,6 @@ ENV RAILS_ENV="production" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development:test"
 
-
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
@@ -39,9 +38,8 @@ RUN mkdir -p public/assets && chmod -R 755 public
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Skip asset precompilation - will be handled by CDN or runtime
-# RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
+# Precompile assets during build with dummy key
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base AS final
@@ -61,14 +59,17 @@ RUN chmod +x bin/*
 # Create public/assets directory and set permissions
 RUN mkdir -p public/assets && chmod -R 755 public
 
-# Run and own only the runtime files as a non-root user for security
-RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp bin public
-USER rails:rails
+# Create a non-root user
+RUN useradd --create-home --shell /bin/bash rails
 
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+# Change ownership of the app directory to the rails user
+RUN chown -R rails:rails /rails
 
-# Start the server by default, this can be overwritten at runtime
+# Switch to the rails user
+USER rails
+
+# Expose port 8080
 EXPOSE 8080
-CMD ["./bin/rails", "server", "-b", "0.0.0.0", "-p", "8080"]
+
+# Start the application
+CMD ["./bin/docker-entrypoint", "./bin/rails", "server", "-b", "0.0.0.0", "-p", "8080"]

@@ -5,15 +5,9 @@ set -e
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   echo "Starting Rails application..."
   
-  # Check database connection
-  echo "Checking database connection..."
-  ./bin/rails db:version 2>/dev/null || echo "Database connection failed"
-  
-  # Quick database migration only
+  # Run database migrations
+  echo "Running database migrations..."
   ./bin/rails db:migrate 2>/dev/null || true
-  
-  # Skip asset precompilation for faster startup
-  echo "Skipping asset precompilation for faster startup"
   
   echo "Rails application ready"
 fi

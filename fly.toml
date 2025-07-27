@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for meditation-app on 2024-12-19T10:00:00Z
+# fly.toml app configuration file generated for meditation-app
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 
@@ -41,21 +41,15 @@ primary_region = "nrt"
     hard_limit = 25
     soft_limit = 20
 
-          [[services.tcp_checks]]
-          interval = "15s"
-          timeout = "3s"
-          grace_period = "30s"
-          restart_limit = 0
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "3s"
+    grace_period = "30s"
+    restart_limit = 0
 
-        [[services.http_checks]]
-          grace_period = "30s"
-          interval = "30s"
-          method = "GET"
-          timeout = "10s"
-          path = "/health"
-          protocol = "http"
-          tls_skip_verify = true
-
-# PostgreSQLアドオンは別途設定が必要
-# fly postgres create --name meditation-app-db --region nrt
-# fly postgres attach meditation-app-db --app meditation-app 
+  [[services.http_checks]]
+    grace_period = "30s"
+    interval = "30s"
+    method = "GET"
+    timeout = "10s"
+    path = "/health" 
