@@ -15,6 +15,7 @@ primary_region = "nrt"
   WEB_CONCURRENCY = "1"
   RAILS_MAX_THREADS = "5"
   RAILS_MIN_THREADS = "5"
+  RAILS_MASTER_KEY = "a4a556fb9e6abd54346e2ba0646e1f6facbc586464a4613e7291a8b9fc0019859a3c831cd5482982fc713d818fc737cf18bd75cbdc598ae7ded07b207f8ffb65"
 
 [[vm]]
   cpu_kind = "shared"
