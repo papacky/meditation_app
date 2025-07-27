@@ -57,7 +57,7 @@ RUN chmod +x bin/*
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp bin
+    chown -R rails:rails db log storage tmp bin public
 USER rails:rails
 
 # Entrypoint prepares the database.
