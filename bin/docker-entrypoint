@@ -5,13 +5,19 @@ set -e
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   echo "Starting Rails application..."
   
+  # Check database connection
+  echo "Checking database connection..."
+  ./bin/rails db:version 2>/dev/null || echo "Database connection failed"
+  
   # Quick database migration only
   ./bin/rails db:migrate 2>/dev/null || true
   
-  # Precompile assets if they don't exist
-  if [ ! -d "public/assets" ] || [ -z "$(ls -A public/assets 2>/dev/null)" ]; then
+  # Precompile assets only if they don't exist (faster startup)
+  if [ ! -f "public/assets/manifest.json" ]; then
     echo "Precompiling assets..."
     ./bin/rails assets:precompile
+  else
+    echo "Assets already precompiled"
   fi
   
   echo "Rails application ready"
