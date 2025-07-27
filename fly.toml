@@ -54,6 +54,8 @@ primary_region = "nrt"
     method = "GET"
     timeout = "5s"
     path = "/health"
+    protocol = "http"
+    tls_skip_verify = true
 
 # PostgreSQLアドオンは別途設定が必要
 # fly postgres create --name meditation-app-db --region nrt
