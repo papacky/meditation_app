@@ -12,13 +12,8 @@ if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   # Quick database migration only
   ./bin/rails db:migrate 2>/dev/null || true
   
-  # Precompile assets only if they don't exist (faster startup)
-  if [ ! -f "public/assets/manifest.json" ]; then
-    echo "Precompiling assets..."
-    ./bin/rails assets:precompile
-  else
-    echo "Assets already precompiled"
-  fi
+  # Skip asset precompilation for faster startup
+  echo "Skipping asset precompilation for faster startup"
   
   echo "Rails application ready"
 fi
