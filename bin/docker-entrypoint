@@ -1,10 +1,13 @@
-#!/bin/bash -e
+#!/bin/bash
+set -e
 
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   ./bin/rails db:prepare
-  # Precompile assets if they don't exist
+  # Precompile assets if they don't exist and ensure directory permissions
   if [ ! -d "public/assets" ] || [ -z "$(ls -A public/assets 2>/dev/null)" ]; then
+    mkdir -p public/assets
+    chmod -R 755 public
     ./bin/rails assets:precompile
   fi
 fi

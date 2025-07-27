@@ -33,6 +33,9 @@ COPY . .
 # Set execute permissions for all scripts in bin directory
 RUN chmod +x bin/*
 
+# Create public/assets directory and set permissions
+RUN mkdir -p public/assets && chmod -R 755 public
+
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
@@ -54,6 +57,9 @@ COPY --from=build /rails /rails
 
 # Set execute permissions for scripts
 RUN chmod +x bin/*
+
+# Create public/assets directory and set permissions
+RUN mkdir -p public/assets && chmod -R 755 public
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
