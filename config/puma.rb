@@ -52,8 +52,13 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 plugin :tmp_restart
 
 # 起動時間を短縮するための設定
-preload_app!
-workers ENV.fetch("WEB_CONCURRENCY") { 1 }
+# 本番環境では単一ワーカーモードを使用
+if ENV.fetch("RAILS_ENV") { "development" } == "production"
+  workers 0  # 単一ワーカーモード
+else
+  preload_app!
+  workers ENV.fetch("WEB_CONCURRENCY") { 1 }
+end
 
 # ヘルスチェック用の設定
 before_fork do

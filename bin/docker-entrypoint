@@ -5,9 +5,9 @@ set -e
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   echo "Starting Rails application..."
   
-  # Run database migrations
-  echo "Running database migrations..."
-  ./bin/rails db:migrate 2>/dev/null || true
+  # Run database migrations (skip for now)
+  echo "Skipping database migrations for now..."
+  # ./bin/rails db:migrate || echo "Migration failed, continuing..."
   
   # Check if assets are already precompiled
   if [ ! -f "public/assets/manifest.json" ] || [ ! -d "public/assets" ] || [ -z "$(ls -A public/assets 2>/dev/null)" ]; then
