@@ -509,3 +509,65 @@ HTML・CSS・Tailwindの使い方解説
 railsへのUbuntuターミナルへの処理は、私の方で行います。
 
 
+＜25.7.29　Flyへのデプロイ＞
+・7/27一日かけて、デプロイ失敗　10H程
+・7/29にやっと成功（ただし、一旦ヘルスチェックを無効化している）
+
+＜ヘルスチェックの有効化内容＞
+[[services.http_checks]]
+  grace_period = "120s"
+  interval = "30s"
+  method = "GET"
+  timeout = "30s"
+  path = "/health"
+  protocol = "http"
+
+
+　🎉 **素晴らしいです！デプロイが成功しました！**
+
+[meditation-app.fly.dev](https://meditation-app.fly.dev) でログイン画面が正常に表示されているということは、アプリケーションとデータベースの接続が完全に解決されました！
+
+## 成功したポイント
+
+1. **データベースの再構築**: `DISABLE_DATABASE_ENVIRONMENT_CHECK=1` を使用したデータベースのリセットが成功
+2. **マイグレーションの実行**: すべてのテーブル（users等）が正しく作成された
+3. **アプリケーションの起動**: Railsアプリが正常に動作している
+4. **ルーティング**: Deviseのログイン画面が正しく表示されている
+
+## 今後の運用について
+
+### データベース操作のコツ
+- **本番環境での破壊的操作**: `DISABLE_DATABASE_ENVIRONMENT_CHECK=1` が必要
+- **SSHコンソール**: `fly ssh console -a meditation-app` で直接操作
+- **環境変数**: `export DISABLE_DATABASE_ENVIRONMENT_CHECK=1` で設定
+
+### 便利なコマンド
+```bash
+# ログ確認
+fly logs -a meditation-app
+
+# アプリ状態確認
+fly status -a meditation-app
+
+# ブラウザで開く
+fly apps open meditation-app
+
+# SSHコンソール
+fly ssh console -a meditation-app
+```
+
+
+🎯 補足：Renderとの違い
+項目	Render	Fly.io
+DBの用意	自動	手動（CLI）
+永続ファイル保存	自動（データベース）	Volumeを指定して保持
+UIでの管理	わかりやすいWeb UI	CLI中心、ややテクニカル
+Docker対応	不要（buildpack）	必須または選択制
+
+✅ まとめ
+**Volumeとは「永続ストレージ」**で、Flyでアプリが再起動してもデータを保つために必要です。
+
+Fly.ioは柔軟性が高い反面、環境構築にある程度の知識と操作が求められます。
+
+最初はRenderなどで動かしてから、Flyにチャレンジするのもよい方法です。
+　
