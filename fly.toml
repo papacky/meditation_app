@@ -50,11 +50,11 @@ primary_region = "nrt"
     grace_period = "30s"
     restart_limit = 0
 
-  # ヘルスチェックを一時的に無効化
-  # [[services.http_checks]]
-  #   grace_period = "120s"
-  #   interval = "30s"
-  #   method = "GET"
-  #   timeout = "30s"
-  #   path = "/health"
-  #   protocol = "http" 
+  # ヘルスチェックを有効化
+  [[services.http_checks]]
+    grace_period = "60s"
+    interval = "30s"
+    method = "GET"
+    timeout = "10s"
+    path = "/health"
+    protocol = "http" 
